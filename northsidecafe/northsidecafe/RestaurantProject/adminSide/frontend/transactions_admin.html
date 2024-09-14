@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		
+		<title>Transactions (Admin)</title>
+		<link rel="stylesheet" href="css/styles.css">
+
+	</head>
+
+	<body>
+        <script src="js/script.js"></script>
+        <div class="container">
+
+            <!--Navigation bar-->
+            <header class="navbar">
+                <div class="navhome">
+                    <a href="index.html"><img src="logos/home.png"></a>
+                    <a href="index.html"><h2>Northside Café</h2></a>
+                </div>
+                <div class="navlinks">
+                    <div class="adminlinks">
+                        <a href="settings.html"><img src="logos/settings.png"></a>
+                        <a href="report.html"><img src="logos/analytics.png"></a>
+                    </div>
+                    <div class="generallinks">
+                        <a href="transactions.html"><img src="logos/print.png"></a>
+                        <a href="user.html"><img src="logos/user.png"></a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="main-manage">
+
+                <div class="manage-header">
+                    <h1>SALES TRANSACTIONS</h1>
+                    
+                </div>
+                <hr>
+                <div class="manage-table">
+                    <table id="transaction-table">
+                        <tr>
+                            <th>DATE</th>
+                            <th>ORDER</th>
+                            <th>PRICE</th>
+                            <th>STAFF</th>
+                            <th>PRINT RECEIPT</th>
+                            <th></th>
+                        </tr>
+
+                        <tr class="menu-item">
+                            <td id="transaction-date">09-09-2024</td>
+                            <td id="transaction-order">Cafe Latte</td>
+                            <td id="transaction-price">$5.00</td>
+                            <td id="transaction-staff">KS</td>
+                            <td><img src="logos/printer_beige.png" id="transactions-printer"></td>
+                        </tr>
+                        
+                    </table>
+                </div>
+            
+            </div>
+        </div>
+        
+    </body>
+</html>
