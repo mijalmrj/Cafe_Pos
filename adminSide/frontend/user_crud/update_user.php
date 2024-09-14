@@ -5,7 +5,6 @@ require_once '../../config.php'; // Adjust the path as necessary
 // Initialize variables
 $user_id = "";
 $username = "";
-$password = "";
 $role = "";
 $email = "";
 $contact_number = "";
@@ -14,15 +13,14 @@ $contact_number = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_id = $_POST['user_id'];
     $username = $_POST['username'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Encrypt password
     $role = $_POST['role'];
     $email = $_POST['email'];
     $contact_number = $_POST['contact_number'];
 
     // Update user details
-    $sql = "UPDATE users SET username=?, password=?, role=?, Email=?, Contact_number=? WHERE user_id=?";
+    $sql = "UPDATE users SET username=?, role=?, Email=?, Contact_number=? WHERE user_id=?";
     $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, 'sssssi', $username, $password, $role, $email, $contact_number, $user_id);
+    mysqli_stmt_bind_param($stmt, 'ssssi', $username, $role, $email, $contact_number, $user_id);
 
     if (mysqli_stmt_execute($stmt)) {
         echo "<p>User updated successfully!</p>";
@@ -48,6 +46,7 @@ if (isset($_GET['user_id'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,6 +58,7 @@ if (isset($_GET['user_id'])) {
             margin: 0;
             padding: 20px;
         }
+
         .container {
             max-width: 600px;
             margin: 0 auto;
@@ -67,20 +67,23 @@ if (isset($_GET['user_id'])) {
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h2 {
             text-align: center;
             color: #333;
         }
+
         form {
             display: flex;
             flex-direction: column;
         }
+
         label {
             margin: 10px 0 5px;
             font-weight: bold;
         }
+
         input[type="text"],
-        input[type="password"],
         input[type="email"],
         input[type="number"],
         select {
@@ -89,6 +92,7 @@ if (isset($_GET['user_id'])) {
             border-radius: 4px;
             margin-bottom: 20px;
         }
+
         button {
             padding: 10px 20px;
             border: none;
@@ -98,21 +102,22 @@ if (isset($_GET['user_id'])) {
             cursor: pointer;
             font-size: 16px;
         }
+
         button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Update User</h2>
+        <a href="read_user.php"><button class="action-button">Back</button></a>
+
         <form method="POST" action="update_user.php">
             <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
 
             <label for="role">Role:</label>
             <select id="role" name="role" required>
@@ -132,6 +137,7 @@ if (isset($_GET['user_id'])) {
         </form>
     </div>
 </body>
+
 </html>
 
 <?php

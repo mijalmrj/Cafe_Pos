@@ -46,6 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container">
         <h2>Create New User</h2>
+        <a href="read_user.php"><button class="action-button">Back</button></a>
+
         <form action="create_user.php" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>

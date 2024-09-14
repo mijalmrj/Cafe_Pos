@@ -10,6 +10,7 @@ $result = mysqli_query($link, $sql);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +22,7 @@ $result = mysqli_query($link, $sql);
             margin: 0;
             padding: 20px;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -29,36 +31,46 @@ $result = mysqli_query($link, $sql);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h2 {
             text-align: center;
             color: #333;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
         }
-        th, td {
+
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+
         th {
             background-color: #f4f4f4;
             color: #333;
         }
+
         tr:hover {
             background-color: #f1f1f1;
         }
+
         .no-data {
             text-align: center;
             color: #666;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>User List</h2>
+        <a href="create_user.php"><button class="action-button">Add User</button></a>
+
         <?php
         if ($result && mysqli_num_rows($result) > 0) {
             echo '<table>';
@@ -81,6 +93,10 @@ $result = mysqli_query($link, $sql);
                 echo '<td>' . htmlspecialchars($row['role']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['Email']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['Contact_number']) . '</td>';
+                echo '<td>
+                        <a href="update_user.php?user_id=' . $row["user_id"] . '">EDIT</a> 
+                        <a href="delete_user.php?user_id=' . $row["user_id"] . '">DELETE</a>
+                    </td>';
                 echo '</tr>';
             }
 
@@ -94,4 +110,5 @@ $result = mysqli_query($link, $sql);
         ?>
     </div>
 </body>
+
 </html>

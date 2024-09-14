@@ -1,197 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<head>
-		
-		<title>Customization Menu</title>
-		<link rel="stylesheet" href="css/styles.css">
+<head>
 
-	</head>
+    <title>Customization Menu</title>
+    <link rel="stylesheet" href="css/styles.css">
 
-	<body class="gradient-background">
-        <div class="container">
+</head>
 
-            <!--Navigation bar-->
-            <header class="navbar">
-                <div class="navhome">
-                    <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
-                    <a href="index.php"><h2>Northside Café</h2></a>
+<body class="gradient-background">
+    <div class="container">
+
+        <!--Navigation bar-->
+        <header class="navbar">
+            <div class="navhome">
+                <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
+                <a href="index.php">
+                    <h2>Northside Café</h2>
+                </a>
+            </div>
+            <div class="navlinks">
+                <div class="adminlinks">
+                    <a href="settings.html"><img src="logos/settings.png"></a>
+                    <a href="report.html"><img src="logos/analytics.png"></a>
                 </div>
-                <div class="navlinks">
-                    <div class="adminlinks">
-                        <a href="settings.html"><img src="logos/settings.png"></a>
-                        <a href="report.html"><img src="logos/analytics.png"></a>
-                    </div>
-                    <div class="generallinks">
-                        <a href="transactions_admin.html"><img src="logos/print.png"></a>
-                        <a href="user.html"><img src="logos/user.png"></a>
-                    </div>
+                <div class="generallinks">
+                    <a href="transactions_admin.html"><img src="logos/print.png"></a>
+                    <a href="user.html"><img src="logos/user.png"></a>
                 </div>
-            </header>
+            </div>
+        </header>
 
-            <div class="main">
+        <div class="main">
 
-                <!--Menu box-->
-                <div class="custom-menu">
-                    <div class="customization-title">
-                        <h1>SELECT/CUSTOMIZE</h1>
-                    </div>
-                    <div class="menu-container">
-                        <div class="size-menu">
-                            <!-- Showing image of selected beverage: -->
-                            <div class="selection-item-box">
-                                <img id="selection-img" alt="selection-img">
-                                <h3></h3>
-                            </div>
-                            
-                            <!-- Buttons for selection -->
-                            <button class="size-option" id="small" onclick="setSize('small')">Small</button>
-                            <button class="size-option" id="large" onclick="setSize('large')">Large +$1</button>
-                            <div class="add-on-div">
-                                <label class="add-on-option">
+            <!--Menu box-->
+            <div class="custom-menu">
+                <div class="customization-title">
+                    <h1>SELECT/CUSTOMIZE</h1>
+                </div>
+                <div class="menu-container">
+                    <div class="size-menu">
+                        <!-- Showing image of selected beverage: -->
+                        <div class="selection-item-box">
+                            <img id="selection-img" alt="selection-img">
+                            <h3></h3>
+                        </div>
+
+                        <!-- Buttons for selection -->
+                        <button class="size-option" id="small" onclick="setSize('small')">Small</button>
+                        <button class="size-option" id="large" onclick="setSize('large')">Large +$1</button>
+                        <div class="add-on-div">
+                            <label class="add-on-option">
                                 <input type="checkbox" id="takeaway"> Takeaway
-                                </label>
-                                <label class="add-on-option">
+                            </label>
+                            <label class="add-on-option">
                                 <input type="checkbox" id="sugar"> Sugar
-                                </label>
-                            </div>
-                        </div>
-                        <div class="milk-menu">
-                            <!-- Buttons for selection -->
-                            <button class="milk-option" id="regular" onclick="setMilk('regular')">Regular milk</button>
-                            <button class="milk-option" id="almond" onclick="setMilk('almond')">Almond milk</button>
-                            <button class="milk-option" id="soy" onclick="setMilk('soy')">Soy milk</button>
-                            <button class="milk-option" id="lactose" onclick="setMilk('lactose')">Lactose free</button>
-
-                            <!-- Add to cart button -->
-                            <button class="milk-option" id="add_button" onclick="addToCart()" style="margin-top: 100px;">Add to cart</button>
+                            </label>
                         </div>
                     </div>
-                </div>
+                    <div class="milk-menu">
+                        <!-- Buttons for selection -->
+                        <button class="milk-option" id="regular" onclick="setMilk('regular')">Regular milk</button>
+                        <button class="milk-option" id="almond" onclick="setMilk('almond')">Almond milk</button>
+                        <button class="milk-option" id="soy" onclick="setMilk('soy')">Soy milk</button>
+                        <button class="milk-option" id="lactose" onclick="setMilk('lactose')">Lactose free</button>
 
-                <!--Order summary-->
-                <div class="order-box">
-                    <div class="order-box-inner">
-                        <div class="order-number"></div>
-                        <hr>
-                        <div class="order-info"></div>
-                        <hr>
-                        <!--Payment method section with buttons-->
-                        <div class="payment-method">
-                            <h2>Payment method</h2>
-                            <div class="payment-options">
-                                <button class="cash-option"><img src="logos/cash_icon.png"></button>
-                                <button class="card-option"><img src="logos/card_icon.png"></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-button-box">
-                        <button class="order-button" id="order-button">Place order <img src="logos/arrow.png" id="order-arrow"></button>
+                        <!-- Add to cart button -->
+                        <button class="milk-option" id="add_button" onclick="addToCart()" style="margin-top: 100px;">Add
+                            to cart</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </body>
 
-    <!-- JS script file -->
-    <script>
-        let orderNumber = 1, selectionImg, selectionPrice = 0, selectionName = '';
-        let size = '', milk = '';
-
-        const regularBtn = document.getElementById('regular');
-        const almondBtn = document.getElementById('almond');
-        const soyBtn = document.getElementById('soy');
-        const lactoseBtn = document.getElementById('lactose');
-        const milkButtons = [regularBtn, almondBtn, soyBtn, lactoseBtn];
-
-        const smallBtn = document.getElementById('small');
-        const largeBtn = document.getElementById('large');
-        const sizeButtons = [smallBtn, largeBtn];
-
-        function changeMilkBtnColor() {
-            milkButtons.forEach(button => {
-                if (button.id === milk) {
-                    button.style.backgroundColor = '#424645'; 
-                    button.style.color = '#ffffff';
-                } else {
-                    button.style.backgroundColor = '#f7e4d0';
-                    button.style.color = '#000000';
-                }
-            });
-        }
-
-        function changeSizeBtnColor() {
-            sizeButtons.forEach(button => {
-                if (button.id === size) {
-                    button.style.backgroundColor = '#424645'; 
-                    button.style.color = '#ffffff';
-                } else {
-                    button.style.backgroundColor = '#f7e4d0';
-                    button.style.color = '#000000';
-                }
-            });
-        }
-
-        function setSize(sizeOption) {
-            size = sizeOption;
-            changeSizeBtnColor();
-        }
-
-        function setMilk(milkOption) {
-            milk = milkOption;
-            changeMilkBtnColor();
-        }
-
-        function addToCart() {
-            const takeawayCheckbox = document.getElementById('takeaway');
-            const takeaway = takeawayCheckbox.checked;
-            const takeawayText = takeaway ? 'Takeaway' : 'Dine in';
-            const sugarCheckbox = document.getElementById('sugar');
-            const sugar = sugarCheckbox.checked;
-            const sugarText = sugar ? 'With Sugar' : 'No Sugar';
-            const cost = size === 'large' ? selectionPrice + 1 : selectionPrice;
-
-            const orderInfo = document.querySelector('.order-info');
-            orderInfo.innerHTML += `<div class='addedOrderInfo'">
-                <p>${orderNumber}.</p>
-                <img src="${selectionImg}" style="width: 100px; height: 100px;">
-                <div>
-                    <p>${selectionName}</p>
-                     <p>Size: ${size}</p>
-                    <p>Milk: ${milk}</p>
-                    <p>${takeawayText}</p>
-                    <p>${sugarText}</p>
-                    <p>Cost: $${cost}</p>
+            <!--Order summary-->
+            <div class="order-box">
+                <div class="order-box-inner">
+                    <div class="order-number"></div>
+                    <hr>
+                    <div class="order-info"></div>
+                    <hr>
+                    <!--Payment method section with buttons-->
+                    <div class="payment-method">
+                        <h2>Payment method</h2>
+                        <div class="payment-options">
+                            <button class="cash-option"><img src="logos/cash_icon.png"></button>
+                            <button class="card-option"><img src="logos/card_icon.png"></button>
+                        </div>
+                    </div>
                 </div>
-            </div>`;
-            orderNumber++;
-        }
+                <div class="order-button-box">
+                    <button class="order-button" id="order-button" onclick="goToShipping()">Place order <img
+                            src="logos/arrow.png" id="order-arrow"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 
-        function getParameterByName(name) {
-            const url = window.location.href;
-            const nameRegex = name.replace(/[\[\]]/g, '\\$&');
-            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-            const results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        }
+<!-- JS script file -->
+<script>
+    let orderNumber = 1,
+        selectionImg, selectionPrice = 0,
+        selectionName = '';
+    let size = '',
+        milk = '';
 
-        window.onload = function() {
-            const imgSrc = getParameterByName('imgSrc');
-            if (imgSrc) {
-                const img = document.getElementById('selection-img');
-                img.src = imgSrc;
-                selectionImg = img.src;
+    const regularBtn = document.getElementById('regular');
+    const almondBtn = document.getElementById('almond');
+    const soyBtn = document.getElementById('soy');
+    const lactoseBtn = document.getElementById('lactose');
+    const milkButtons = [regularBtn, almondBtn, soyBtn, lactoseBtn];
 
-                const next = img.nextElementSibling;
-                next.innerHTML = selectionDetails = getParameterByName('title');
-                selectionName = selectionDetails.split('<br>')[0];
-                selectionPrice = parseFloat(selectionDetails.split('$')[1]);
+    const smallBtn = document.getElementById('small');
+    const largeBtn = document.getElementById('large');
+    const sizeButtons = [smallBtn, largeBtn];
+
+    function changeMilkBtnColor() {
+        milkButtons.forEach(button => {
+            if (button.id === milk) {
+                button.style.backgroundColor = '#424645';
+                button.style.color = '#ffffff';
+            } else {
+                button.style.backgroundColor = '#f7e4d0';
+                button.style.color = '#000000';
             }
-        };
+        });
+    }
 
-        setSize('small');
-        setMilk('regular');
-    </script>
+    function changeSizeBtnColor() {
+        sizeButtons.forEach(button => {
+            if (button.id === size) {
+                button.style.backgroundColor = '#424645';
+                button.style.color = '#ffffff';
+            } else {
+                button.style.backgroundColor = '#f7e4d0';
+                button.style.color = '#000000';
+            }
+        });
+    }
+
+    function setSize(sizeOption) {
+        size = sizeOption;
+        changeSizeBtnColor();
+    }
+
+    function setMilk(milkOption) {
+        milk = milkOption;
+        changeMilkBtnColor();
+    }
+
+    function goToShipping() {
+        const takeawayCheckbox = document.getElementById('takeaway');
+        const takeaway = takeawayCheckbox.checked ? 'Takeaway' : 'Dine in';
+        const sugarCheckbox = document.getElementById('sugar');
+        const sugar = sugarCheckbox.checked ? 'With Sugar' : 'No Sugar';
+        const cost = size === 'large' ? selectionPrice + 1 : selectionPrice;
+
+        // Prepare the query parameters for the next page
+        const params = new URLSearchParams({
+            orderNumber,
+            selectionName,
+            size,
+            milk,
+            takeaway,
+            sugar,
+            cost
+        });
+
+        // Redirect to shipping.html with order details as query parameters
+        window.location.href = `shipping.html?${params.toString()}`;
+    }
+
+    function addToCart() {
+        const takeawayCheckbox = document.getElementById('takeaway');
+        const takeaway = takeawayCheckbox.checked;
+        const takeawayText = takeaway ? 'Takeaway' : 'Dine in';
+        const sugarCheckbox = document.getElementById('sugar');
+        const sugar = sugarCheckbox.checked;
+        const sugarText = sugar ? 'With Sugar' : 'No Sugar';
+        const cost = size === 'large' ? selectionPrice + 1 : selectionPrice;
+
+        const orderInfo = document.querySelector('.order-info');
+        orderInfo.innerHTML += `<div class='addedOrderInfo'">
+            <p>${orderNumber}.</p>
+            <img src="${selectionImg}" style="width: 100px; height: 100px;">
+            <div>
+                <p>${selectionName}</p>
+                 <p>Size: ${size}</p>
+                <p>Milk: ${milk}</p>
+                <p>${takeawayText}</p>
+                <p>${sugarText}</p>
+                <p>Cost: $${cost}</p>
+            </div>
+        </div>`;
+        orderNumber++;
+    }
+
+
+    function getParameterByName(name) {
+        const url = window.location.href;
+        const nameRegex = name.replace(/[\[\]]/g, '\\$&');
+        const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+        const results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    window.onload = function() {
+        const imgSrc = getParameterByName('imgSrc');
+        if (imgSrc) {
+            const img = document.getElementById('selection-img');
+            img.src = imgSrc;
+            selectionImg = img.src;
+
+            const next = img.nextElementSibling;
+            next.innerHTML = selectionDetails = getParameterByName('title');
+            selectionName = selectionDetails.split('<br>')[0];
+            selectionPrice = parseFloat(selectionDetails.split('$')[1]);
+        }
+    };
+
+    setSize('small');
+    setMilk('regular');
+</script>
+
 </html>
