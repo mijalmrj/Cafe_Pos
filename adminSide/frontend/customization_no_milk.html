@@ -73,40 +73,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="order-button-box">
+                     <!-- Form for payment -->
+                     <form action="confirmed.html">
                         <button class="order-button" id="order-button">Place order <img src="logos/arrow.png" id="order-arrow"></button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </body>
 
-    <!-- JS script file -->
-    <script>
-        let orderNumber = 1, selectionImg, selectionPrice = 0, selectionName = '';
-        let size = '', milk = '';
+    <!-- Script path -->
+    <script src="js/cartUpdater.js"></script>
 
-        const regularBtn = document.getElementById('regular');
-        const almondBtn = document.getElementById('almond');
-        const soyBtn = document.getElementById('soy');
-        const lactoseBtn = document.getElementById('lactose');
-        const milkButtons = [regularBtn, almondBtn, soyBtn, lactoseBtn];
+    <!-- Script path -->
+    <script src="js/paymentMethod.js"></script>
+    <script>
+        // Helpful functions
+        updateCart();
+        enablePaymentUpdate();
+        updateColor();
+
+        let selectionImg, selectionPrice = 0, selectionName = '';
+        let size = '';
 
         const smallBtn = document.getElementById('small');
         const largeBtn = document.getElementById('large');
         const sizeButtons = [smallBtn, largeBtn];
 
-        function changeMilkBtnColor() {
-            milkButtons.forEach(button => {
-                if (button.id === milk) {
-                    button.style.backgroundColor = '#424645'; 
-                    button.style.color = '#ffffff';
-                } else {
-                    button.style.backgroundColor = '#f7e4d0';
-                    button.style.color = '#000000';
-                }
-            });
-        }
 
         function changeSizeBtnColor() {
             sizeButtons.forEach(button => {
@@ -125,30 +118,23 @@
             changeSizeBtnColor();
         }
 
-        function setMilk(milkOption) {
-            milk = milkOption;
-            changeMilkBtnColor();
-        }
 
         function addToCart() {
+            // Persisting cart functionality with localStorage
+            let orderDetails = {};
             const takeawayCheckbox = document.getElementById('takeaway');
-            const takeaway = takeawayCheckbox.checked;
-            const takeawayText = takeaway ? 'Takeaway' : 'Dine in';
-            const cost = size === 'large' ? selectionPrice + 1 : selectionPrice;
-
-            const orderInfo = document.querySelector('.order-info');
-            orderInfo.innerHTML += `<div class='addedOrderInfo'">
-                <p>${orderNumber}.</p>
-                <img src="${selectionImg}" style="width: 100px; height: 100px;">
-                <div>
-                    <p>${selectionName}</p>
-                     <p>Size: ${size}</p>
-                    <p>Milk: ${milk}</p>
-                    <p>${takeawayText}</p>
-                    <p>Cost: $${cost}</p>
-                </div>
-            </div>`;
-            orderNumber++;
+            orderDetails.takeaway = takeawayCheckbox.checked;
+            orderDetails.takeawayText = orderDetails.takeaway ? 'Takeaway' : 'Dine in';
+            orderDetails.cost = size === 'large' ? selectionPrice + 1 : selectionPrice;
+            orderDetails.size = size;
+            orderDetails.imgSrc = selectionImg;
+            orderDetails.name = selectionName;
+            let itemList = JSON.parse(localStorage.getItem("cart"))
+            itemList = itemList ? itemList : [];
+            orderDetails.no = itemList.length + 1;
+            itemList.push(orderDetails)
+            localStorage.setItem("cart", JSON.stringify(itemList)); 
+            updateCart();
         }
 
         function getParameterByName(name) {
@@ -176,6 +162,6 @@
         };
 
         setSize('small');
-        setMilk('regular');
+
     </script>
 </html>

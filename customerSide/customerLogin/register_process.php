@@ -32,7 +32,7 @@ die('Connection Failed'.$link->connect_error);//kills the Connection OR terminat
 <head>
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
     <style>
-        /* Your custom CSS styles for the success message card here */
+        /*  custom CSS styles for the success message card here */
         body {
             text-align: center;
             padding: 40px 0;

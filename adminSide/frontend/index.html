@@ -1,96 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Index</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body class="gradient-background">
-    <div class="container">
-        <!-- Navigation bar -->
-        <header class="navbar">
-            <div class="navhome">
-                <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
-                <a href="index.html"><h2>Northside Café</h2></a>
-            </div>
-            <div class="navlinks">
-                <div class="adminlinks">
-                    <a href="settings.html"><img src="logos/settings.png"></a>
-                    <a href="report.html"><img src="logos/analytics.png"></a>
+
+	<head>
+		
+		<title>Index</title>
+		<link rel="stylesheet" href="css/styles.css">
+
+	</head>
+
+	<body class="gradient-background">
+        <div class="container">
+
+             <!--Navigation bar-->
+             <header class="navbar">
+                <div class="navhome">
+                    <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
+                    <a href="index.html"><h2>Northside Café</h2></a>
                 </div>
-                <div class="generallinks">
-                    <a href="transactions_admin.html"><img src="logos/print.png"></a>
-                    <a href="user.html"><img src="logos/user.png"></a>
+                <div class="navlinks">
+                    <div class="adminlinks">
+                        <a href="settings.html"><img src="logos/settings.png"></a>
+                        <a href="report.html"><img src="logos/analytics.png"></a>
+                    </div>
+                    <div class="generallinks">
+                        <a href="transactions_admin.html"><img src="logos/print.png"></a>
+                        <a href="user.html"><img src="logos/user.png"></a>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
-        <div class="main">
-            <!-- Menu box -->
-            <div class="menu-box">
-                <div class="title-bar"><h1>CATEGORIES</h1></div>
-                <div class="menu-box-grid">
-                    <!-- Existing menu items -->
-                    <a href="coffee_menu.html">
-                        <div class="menu-box-item">
-                            <img src="images/coffees_image.png" title="coffees">
-                            <h3>Coffees</h3>
-                        </div>
-                    </a>
-                    <a href="iced_drinks_menu.html">
-                        <div class="menu-box-item">
-                            <img src="images/iced_drinks_image.png" title="iced_drinks">
-                            <h3>Iced drinks</h3>
-                        </div>
-                    </a>
-                    <a href="tea_menu.html">
-                        <div class="menu-box-item">
-                            <img src="images/teas_image.png" title="teas">
-                            <h3>Teas</h3>
-                        </div>
-                    </a>
-                    <a href="soft_drinks_menu.html">
-                        <div class="menu-box-item">
-                            <img src="images/soft_drinks.png" title="soft_drinks">
-                            <h3>Soft drinks</h3>
-                        </div>
-                    </a>
+
+            <div class="main">
+
+                <!--Menu box--> 
+                <div class="menu-box">
+                    <div class="title-bar"><h1>CATEGORIES</h1></div>
+                    <div class="menu-box-grid">
+                        <a href="coffee_menu.html">
+                            <div class="menu-box-item">
+                                <img src="images/coffees_image.png" title="coffees">
+                                <h3>Coffees</h3>
+                            </div>
+                        </a>
+                        
+                        <a href="iced_drinks_menu.html">
+                            <div class="menu-box-item">
+                                <img src="images/iced_drinks_image.png" title="iced_drinks">
+                                <h3>Iced drinks</h3>
+                            </div>
+                        </a>
+
+                        <a href="tea_menu.html">
+                            <div class="menu-box-item">
+                                <img src="images/teas_image.png" title="teas">
+                                <h3>Teas</h3>
+                            </div>
+                        </a>
+
+                        <a href="soft_drinks_menu.html">
+                            <div class="menu-box-item">
+                                <img src="images/soft_drinks.png" title="soft_drinks">
+                                <h3>Soft drinks</h3>
+                            </div>
+                        </a>
+                        
+                    </div>
                 </div>
-            </div>
 
-            <!-- Order Form -->
-            <div class="order-box">
-                <form action="process_order.php" method="post">
-                    <h2>Place Your Order</h2>
-                    <label for="total_amount">Total Amount:</label>
-                    <input type="number" id="total_amount" name="total_amount" step="0.01" min="0" required>
-                    <br><br>
+                <!--Order summary-->
+                <div class="order-box">
+                    <div class="order-box-inner">
+                        <div class="order-number"></div>
+                        <hr>
+                        <div class="order-info"></div>
+                        <hr>
+                        <div class="payment-method">
+                            <h2>Payment method</h2>
+                            <div class="payment-options">
+                                <button class="cash-option"><img src="logos/cash_icon.png"></button>
+                                <button class="card-option"><img src="logos/card_icon.png"></button>
+                            </div>
+                        </div>
 
-                    <label for="shipping_method">Shipping Method:</label>
-                    <select name="shipping_method" id="shipping_method" required>
-                        <option value="pick up">Pick Up</option>
-                        <option value="deliver">Deliver</option>
-                    </select>
-                    <br><br>
+                    </div>
+                    <!-- Form for payment -->
+                    <form action="confirmed.html">
+                        <button class="order-button" id="order-button">Place order <img src="logos/arrow.png" id="order-arrow"></button>
+                    </form>
 
-                    <label for="shipping_time">Shipping Time:</label>
-                    <input type="datetime-local" id="shipping_time" name="shipping_time" required>
-                    <br><br>
-
-                    <label for="shipping_location">Shipping Location:</label>
-                    <input type="text" id="shipping_location" name="shipping_location" required>
-                    <br><br>
-
-                    <label for="order_status">Order Status:</label>
-                    <select name="order_status" id="order_status" required>
-                        <option value="Confirmed">Confirmed</option>
-                        <option value="Canceled">Canceled</option>
-                    </select>
-                    <br><br>
-
-                    <input type="submit" value="Place Order" class="action-button">
-                </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</body>
+        <script src="js/cartUpdater.js"></script>
+        <script src="js/paymentMethod.js"></script>
+        <script>
+            // Helpful functions
+            updateCart();
+            enablePaymentUpdate();
+            updateColor();
+        </script>
+    </body>
 </html>

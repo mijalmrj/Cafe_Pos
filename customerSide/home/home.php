@@ -1,42 +1,73 @@
 <?php
-define('DB_HOST','localhost');
-define('DB_USER','root');
-define('DB_PASS','');
-define('DB_NAME','Cafe');
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'Cafe');
 
-//Create Connection
-$link = new mysqli(DB_HOST,DB_USER,DB_PASS,DB_NAME);
+// Create Connection
+$link = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-//Check COnnection
-if($link->connect_error){ //if not Connection
-die('Connection Failed'.$link->connect_error);//kills the Connection OR terminate execution
+// Check Connection
+if ($link->connect_error) {
+    die('Connection Failed: ' . $link->connect_error); // terminate execution
 }
 
-$sqlmainDishes = "SELECT * FROM menu WHERE item_category = 'Main Dishes' ORDER BY item_type; ";
-$resultmainDishes = mysqli_query($link, $sqlmainDishes);
-$mainDishes = mysqli_fetch_all($resultmainDishes, MYSQLI_ASSOC);
+// SQL Query to get items for 'Tea' category
+$sqlTea = "
+    SELECT p.product_name, p.description, p.price
+    FROM products p
+    JOIN categories c ON p.category_id = c.category_id
+    WHERE c.category_name = 'tea'
+    ORDER BY p.product_name;
+";
+$resultTea = mysqli_query($link, $sqlTea);
+$teaItems = mysqli_fetch_all($resultTea, MYSQLI_ASSOC);
 
-$sqldrinks = "SELECT * FROM menu WHERE item_category = 'Drinks' ORDER BY item_type; ";
-$resultdrinks = mysqli_query($link, $sqldrinks);
-$drinks = mysqli_fetch_all($resultdrinks, MYSQLI_ASSOC);
+// SQL Query to get items for 'Coffee' category
+$sqlCoffee = "
+    SELECT p.product_name, p.description, p.price
+    FROM products p
+    JOIN categories c ON p.category_id = c.category_id
+    WHERE c.category_name = 'coffee'
+    ORDER BY p.product_name;
+";
+$resultCoffee = mysqli_query($link, $sqlCoffee);
+$coffeeItems = mysqli_fetch_all($resultCoffee, MYSQLI_ASSOC);
 
-$sqlsides = "SELECT * FROM menu WHERE item_category = 'Side Snacks' ORDER BY item_type; ";
-$resultsides = mysqli_query($link, $sqlsides);
-$sides = mysqli_fetch_all($resultsides, MYSQLI_ASSOC);
+// SQL Query to get items for 'Soft Drinks' category
+$sqlSoftDrinks = "
+    SELECT p.product_name, p.description, p.price
+    FROM products p
+    JOIN categories c ON p.category_id = c.category_id
+    WHERE c.category_name = 'soft drinks'
+    ORDER BY p.product_name;
+";
+$resultSoftDrinks = mysqli_query($link, $sqlSoftDrinks);
+$softDrinksItems = mysqli_fetch_all($resultSoftDrinks, MYSQLI_ASSOC);
 
-
+// SQL Query to get items for 'Ice Drink' category
+$sqlIceDrinks = "
+    SELECT p.product_name, p.description, p.price
+    FROM products p
+    JOIN categories c ON p.category_id = c.category_id
+    WHERE c.category_name = 'ice drink'
+    ORDER BY p.product_name;
+";
+$resultIceDrinks = mysqli_query($link, $sqlIceDrinks);
+$iceDrinksItems = mysqli_fetch_all($resultIceDrinks, MYSQLI_ASSOC);
 
 // Check if the user is logged in
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+session_start();
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     echo '<div class="user-profile">';
     echo 'Welcome, ' . $_SESSION["member_name"] . '!';
     echo '<a href="../customerProfile/profile.php">Profile</a>';
     echo '</div>';
-    
 }
-
-session_start();
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,13 +142,13 @@ session_start();
           <li><a href="#contact" data-after="Contact">Contact</a></li>
           <li><a href="../../adminSide/StaffLogin/login.php" data-after="Staff">Staff</a></li>
           
+      </div>
+    </div>
+  </div>
           
    
 
-        <div class="dropdown">
-            <button class="dropbtn">memberships <i class="fa fa-caret-down" aria-hidden="true"></i> </button>
-        <div class="dropdown-content">
-        
+       
   <?php
 
 // Get the user_id from the query parameters
@@ -219,6 +250,20 @@ function myFunction() {
     // No action needed
   }
 }
+function showPrice(priceId) {
+  // Hide all prices first
+  var prices = document.getElementsByClassName('price');
+  for (var i = 0; i < prices.length; i++) {
+    prices[i].style.display = 'none';
+  }
+
+  // Show the selected price
+  var priceElement = document.getElementById(priceId);
+  if (priceElement) {
+    priceElement.style.display = 'block';
+  }
+}
+
 </script>
         </div>
     </div>
@@ -228,46 +273,67 @@ function myFunction() {
   
 <section id="menu">
   <div class="menu-section">
-    <h1>Our Menu</h1>
-    
-    <div class="menu-category">
-      <h2>Coffee</h2>
-      <ul>
-        <li>Espresso</li>
-        <li>Cappuccino</li>
-        <li>Latte</li>
-        <li>Americano</li>
-      </ul>
-    </div>
+    <div class="menu-category" style="display: flex; justify-content: space-around;">
+      <div class="category" style="flex-basis: 20%;">
+        <h2>Coffee</h2>
+        <ul>
+          <li onclick="showPrice('latte-price')">Latte</li>
+          <li onclick="showPrice('americano-price')">Americano</li>
 
-    <div class="menu-category">
-      <h2>Iced Drinks</h2>
-      <ul>
-        <li>Iced Coffee</li>
-        <li>Iced Latte</li>
-        <li>Cold Brew</li>
-        <li>Iced Mocha</li>
-      </ul>
-    </div>
 
-    <div class="menu-category">
-      <h2>Teas</h2>
-      <ul>
-        <li>Green Tea</li>
-        <li>Black Tea</li>
-        <li>Chai Latte</li>
-        <li>Herbal Tea</li>
-      </ul>
-    </div>
+          <li onclick="showPrice('espresso-price')">Espresso</li>
+          <li onclick="showPrice('cappuccino-price')">Cappuccino</li>
+        </ul>
+        <div id="latte-price" class="price" style="display: none;">Price: $5.50</div>
+        <div id="americano-price" class="price" style="display: none;">Price: $4.75</div>
 
-    <div class="menu-category">
-      <h2>Soft Drinks</h2>
-      <ul>
-        <li>Coke</li>
-        <li>Sprite</li>
-        <li>Fanta</li>
-        <li>Pepsi</li>
-      </ul>
+        <div id="espresso-price" class="price" style="display: none;">Price: $3.50</div>
+        <div id="cappuccino-price" class="price" style="display: none;">Price: $5.25</div>
+      </div>
+
+      <div class="category" style="flex-basis: 20%;">
+        <h2>Iced Drinks</h2>
+        <ul>
+          <li onclick="showPrice('iced-latte-price')">Iced Latte</li>
+          <li onclick="showPrice('iced-tea-price')">Iced Tea</li>
+          <li onclick="showPrice('iced-matcha-price')">Iced Matcha</li>
+          <li onclick="showPrice('hot-chocolate-price')">Hot Chocolate</li>
+        </ul>
+        <div id="iced-latte-price" class="price" style="display: none;">Price: $5.75</div>
+        <div id="iced-tea-price" class="price" style="display: none;">Price: $4.00</div>
+        <div id="cold-matcha-price" class="price" style="display: none;">Price: $5.50</div>
+        <div id="hot-chocolate-price" class="price" style="display: none;">Price: $4.75</div>
+      </div>
+
+      <div class="category" style="flex-basis: 20%;">
+        <h2>Teas</h2>
+        <ul>
+          <li onclick="showPrice('herbal-tea-price')">Herbal Tea</li>
+          <li onclick="showPrice('black-tea-price')">Black Tea</li>
+
+          <li onclick="showPrice('green-tea-price')">Green Tea</li>
+          <li onclick="showPrice('milk-tea-price')">Milk Tea</li>
+        </ul>
+        <div id="herbal-tea-price" class="price" style="display: none;">Price: $5.00</div>
+        <div id="black-tea-price" class="price" style="display: none;">Price: $4.50</div>
+
+        <div id="green-tea-price" class="price" style="display: none;">Price: $4.75</div>
+        <div id="milk-tea-price" class="price" style="display: none;">Price: $5.25</div>
+      </div>
+
+      <div class="category" style="flex-basis: 20%;">
+        <h2>Soft Drinks</h2>
+        <ul>
+          <li onclick="showPrice('Juices-price')">Juiced</li>
+          <li onclick="showPrice('Sodas-price')">Sodas</li>
+          <li onclick="showPrice('Bottled-water-price')">Bottled water</li>
+          <li onclick="showPrice('Kombucha-price')">Kombucha</li>
+        </ul>
+        <div id="Juices-price" class="price" style="display: none;">Price: $3.00</div>
+        <div id="Sodas-price" class="price" style="display: none;">Price: $2.50</div>
+        <div id="Bottled-water-price" class="price" style="display: none;">Price: $1.50</div>
+        <div id="Kombucha-price" class="price" style="display: none;">Price: $4.00</div>
+      </div>
     </div>
   </div>
 </section>
@@ -377,6 +443,7 @@ function myFunction() {
   padding: 0;
   margin: 0;
 }
+
       .msg {
         font-family: 'Montserrat', sans-serif;
         margin-top: 25px;
@@ -397,40 +464,111 @@ function myFunction() {
       /* Styling the select button */
       
 
-    .menu {
-    font-size: 24px;
-    padding: 10px;
-    border: 2px solid black; /* Red border */
-    outline: none;
-    cursor: pointer;
-    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-    color: #000; /* Black text */
-    background-color: #fff; /* White background */
-    border-radius: 0; /* No border radius (sharp corners) */
+/* General styling for the Menu Section */
+#menu {
+  background-color: #f8f8f8; /* Light background */
+  padding: 60px 20px; /* Add padding for spacing */
+  text-align: center;
 }
 
-        /* Style the option text in the select dropdown */
-        .menu-category option {
-          font-size: 20px;
-        }
+#menu h1 {
+  font-size: 36px; /* Increase the font size for the main title */
+  color: #333; /* Darker color for the title */
+  font-family: 'Copperplate', sans-serif; /* Apply the same font family */
+  margin-bottom: 40px; /* Add some space below the title */
+}
 
-        /* Hover effect */
-        .menu-category:hover {
-          background-color: black; /* Red background on hover */
-          color: white; /* Black text on hover */
-        }
+.menu-category {
+  margin-bottom: 50px; /* Add space between the categories */
+}
 
-      /* Use CSS Grid to create three columns */
-      .msg {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr); /* Three columns with equal width */
-        grid-gap: 24px; /* Adjust the gap between items */
-      }
+.menu-category h2 {
+  font-size: 28px; /* Larger font size for the category name */
+  color: #b5651d; /* A soft brown color that fits the cafe theme */
+  margin-bottom: 20px; /* Space below the category heading */
+  font-family: 'Montserrat', sans-serif; /* Stylish font */
+}
 
-      /* Style the menu item content */
-      .msg p {
-        margin: 5px 0;
-      }
+.menu-category ul {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0;
+  margin: 0;
+}
+
+.menu-category li {
+  font-size: 20px; /* Font size for menu items */
+  color: #555; /* Darker text color for visibility */
+  padding: 10px 0; /* Space between items */
+  border-bottom: 1px solid #ddd; /* Line between items */
+}
+
+.menu-category li:last-child {
+  border-bottom: none; /* Remove the bottom border for the last item */
+}
+
+.menu-category li:hover {
+  color: #b5651d; /* Change the color on hover to the brown theme */
+  cursor: pointer; /* Add pointer cursor on hover */
+  background-color: #f0e4d7; /* Soft background color on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+/* Grid layout for Menu Categories */
+.menu-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  gap: 20px; /* Space between grid items */
+  max-width: 1200px; /* Maximum width for the section */
+  margin: 0 auto; /* Center the section */
+}
+
+.menu-category {
+  padding: 20px;
+  background-color: #fff; /* White background for each category */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  border-radius: 8px; /* Slightly rounded corners */
+}
+
+.menu-category h2 {
+  border-bottom: 2px solid #b5651d; /* Brown line under the category name */
+  padding-bottom: 10px; /* Space below the category name */
+}
+
+.menu-category ul {
+  padding-left: 0; /* Remove default padding */
+}
+
+/* Styling for the container of the entire section */
+.menu-section {
+  margin: 50px auto;
+  max-width: 1000px;
+}
+
+/* Styling the list items within the category */
+.menu-category ul li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Add a border between items */
+}
+
+/* On hover, change the background and text color */
+.menu-category ul li:hover {
+  background-color: #f7e7d3;
+  color: #b5651d;
+  cursor: pointer;
+}
+/* Styling for price display */
+.price {
+  font-size: 1.5em; /* Increase font size */
+  font-weight: bold; /* Make font bold */
+  color: #b5651d; /* Use a contrasting color, like a brown shade */
+  padding: 10px; /* Add some padding for spacing */
+  background-color: #f0e4d7; /* Light background color for better contrast */
+  border-radius: 5px; /* Rounded corners for the background */
+  margin-top: 10px; /* Space above the price */
+  display: inline-block; /* Ensure it fits its content */
+}
+
+    
       
     .item-name {
   display: inline-block; /* Ensure items are displayed on separate lines */
@@ -535,7 +673,7 @@ function myFunction() {
 }
 
  .dropdown:hover .dropbtn {
-  color: crimson;
+  color: blue;
   
 }
 

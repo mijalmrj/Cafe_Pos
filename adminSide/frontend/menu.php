@@ -15,7 +15,7 @@
         <header class="navbar">
             <div class="navhome">
                 <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
-                <a href="index.php">
+                <a href="index.html">
                     <h2>Northside Café</h2>
                 </a>
             </div>

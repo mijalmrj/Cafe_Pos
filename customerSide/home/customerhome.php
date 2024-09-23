@@ -12,24 +12,54 @@ if($link->connect_error){ //if not Connection
 die('Connection Failed'.$link->connect_error);//kills the Connection OR terminate execution
 }
 
-$sqlmainDishes = "SELECT * FROM menu WHERE item_category = 'Main Dishes' ORDER BY item_type; ";
-$resultmainDishes = mysqli_query($link, $sqlmainDishes);
-$mainDishes = mysqli_fetch_all($resultmainDishes, MYSQLI_ASSOC);
+// SQL Query to get items for 'Tea' category
+$sqlTea = "
+    SELECT p.product_name, p.description, p.price
+    FROM products p
+    JOIN categories c ON p.category_id = c.category_id
+    WHERE c.category_name = 'tea'
+    ORDER BY p.product_name;
+";
+$resultTea = mysqli_query($link, $sqlTea);
+$teaItems = mysqli_fetch_all($resultTea, MYSQLI_ASSOC);
 
-$sqldrinks = "SELECT * FROM menu WHERE item_category = 'Drinks' ORDER BY item_type; ";
-$resultdrinks = mysqli_query($link, $sqldrinks);
-$drinks = mysqli_fetch_all($resultdrinks, MYSQLI_ASSOC);
+// SQL Query to get items for 'Coffee' category
+$sqlCoffee = "
+    SELECT p.product_name, p.description, p.price
+    FROM products p
+    JOIN categories c ON p.category_id = c.category_id
+    WHERE c.category_name = 'coffee'
+    ORDER BY p.product_name;
+";
+$resultCoffee = mysqli_query($link, $sqlCoffee);
+$coffeeItems = mysqli_fetch_all($resultCoffee, MYSQLI_ASSOC);
 
-$sqlsides = "SELECT * FROM menu WHERE item_category = 'Side Snacks' ORDER BY item_type; ";
-$resultsides = mysqli_query($link, $sqlsides);
-$sides = mysqli_fetch_all($resultsides, MYSQLI_ASSOC);
+// SQL Query to get items for 'Soft Drinks' category
+$sqlSoftDrinks = "
+    SELECT p.product_name, p.description, p.price
+    FROM products p
+    JOIN categories c ON p.category_id = c.category_id
+    WHERE c.category_name = 'soft drinks'
+    ORDER BY p.product_name;
+";
+$resultSoftDrinks = mysqli_query($link, $sqlSoftDrinks);
+$softDrinksItems = mysqli_fetch_all($resultSoftDrinks, MYSQLI_ASSOC);
 
+// SQL Query to get items for 'Ice Drink' category
+$sqlIceDrinks = "
+    SELECT p.product_name, p.description, p.price
+    FROM products p
+    JOIN categories c ON p.category_id = c.category_id
+    WHERE c.category_name = 'ice drink'
+    ORDER BY p.product_name;
+";
+$resultIceDrinks = mysqli_query($link, $sqlIceDrinks);
+$iceDrinksItems = mysqli_fetch_all($resultIceDrinks, MYSQLI_ASSOC);
 
 
 // Check if the user is logged in
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     echo '<div class="user-profile">';
-    echo 'Welcome, ' . $_SESSION["member_name"] . '!';
     echo '<a href="../customerProfile/profile.php">Profile</a>';
     echo '</div>';
     
@@ -84,20 +114,13 @@ session_start();
           
    
 
-        <div class="dropdown">
-            <button class="dropbtn">memberships <i class="fa fa-caret-down" aria-hidden="true"></i> </button>
-        <div class="dropdown-content">
         
   <?php
 
 
             
             // Output the member's information
-            echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px; padding:5px; color:white; '>$username</p>";
-            echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px;padding:5px;color:white; '>$points Points </p>";
-            echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px;padding:5px; color:white; '>$vip_status";
             
-           // Add the tooltip only for Regular status
             
 
 
@@ -139,115 +162,73 @@ mysqli_close($link);
   
   
   <!-- menu Section -->
-  <section id="projects">
-    <div class="projects container">
-      <div class="projects-header">
-        <h1 class="section-title"   >Me<span>n</span>u</h1>
+  <section id="menu">
+  <div class="menu-section">
+    <div class="menu-category" style="display: flex; justify-content: space-around;">
+      <div class="category" style="flex-basis: 20%;">
+        <h2>Coffee</h2>
+        <ul>
+          <li onclick="showPrice('latte-price')">Latte</li>
+          <li onclick="showPrice('americano-price')">Americano</li>
+
+
+          <li onclick="showPrice('espresso-price')">Espresso</li>
+          <li onclick="showPrice('cappuccino-price')">Cappuccino</li>
+        </ul>
+        <div id="latte-price" class="price" style="display: none;">Price: $5.50</div>
+        <div id="americano-price" class="price" style="display: none;">Price: $4.75</div>
+
+        <div id="espresso-price" class="price" style="display: none;">Price: $3.50</div>
+        <div id="cappuccino-price" class="price" style="display: none;">Price: $5.25</div>
       </div>
-     
-        
-       <select style="text-align:center;" id="menu-category" class="menu-category">
-        <option  value="blue">ALL ITEMS</option>
-        <option value="yellow">MAIN DISHES</option>
-        <option value="red">SIDE DISHES</option>
-        <option value="green">DRINKS</option>
-      </select>
-        
-    <div class="yellow msg"> 
-     
-        <div></div>
-      <div class="mainDish">
-           <h1 style="text-align:center;">MAIN DISHES</h1>
-          <?php foreach ($mainDishes as $item): ?>
-      <p>
-        <span class="item-name"> <strong><?php echo $item['item_name']; ?></strong></span>
-        <span class="item-price">$<?php echo $item['item_price']; ?></span><br>
-        <span class="item_type"><i><?php echo $item['item_type']; ?></i></span>
-        <hr>
-        
-      </p>
-    <?php endforeach; ?>
+
+      <div class="category" style="flex-basis: 20%;">
+        <h2>Iced Drinks</h2>
+        <ul>
+          <li onclick="showPrice('iced-latte-price')">Iced Latte</li>
+          <li onclick="showPrice('iced-tea-price')">Iced Tea</li>
+          <li onclick="showPrice('iced-matcha-price')">Iced Matcha</li>
+          <li onclick="showPrice('hot-chocolate-price')">Hot Chocolate</li>
+        </ul>
+        <div id="iced-latte-price" class="price" style="display: none;">Price: $5.75</div>
+        <div id="iced-tea-price" class="price" style="display: none;">Price: $4.00</div>
+        <div id="cold-matcha-price" class="price" style="display: none;">Price: $5.50</div>
+        <div id="hot-chocolate-price" class="price" style="display: none;">Price: $4.75</div>
       </div>
-    </div>
-      
-      
-    <div class="red msg">
-        <div></div>
-      <div class="sideDish">
-           <h1 style="text-align:center">SIDE DISHES</h1>
-          <?php foreach ($sides as $item): ?>
-      <p>
-        <span class="item-name"> <strong><?php echo $item['item_name']; ?></strong></span>
-        <span class="item-price">$<?php echo $item['item_price']; ?></span><br>
-        <span class="item_type"><i><?php echo $item['item_type']; ?></i></span>
-        <hr>
-      </p>
-    <?php endforeach; ?>
+
+      <div class="category" style="flex-basis: 20%;">
+        <h2>Teas</h2>
+        <ul>
+          <li onclick="showPrice('herbal-tea-price')">Herbal Tea</li>
+          <li onclick="showPrice('black-tea-price')">Black Tea</li>
+
+          <li onclick="showPrice('green-tea-price')">Green Tea</li>
+          <li onclick="showPrice('milk-tea-price')">Milk Tea</li>
+        </ul>
+        <div id="herbal-tea-price" class="price" style="display: none;">Price: $5.00</div>
+        <div id="black-tea-price" class="price" style="display: none;">Price: $4.50</div>
+
+        <div id="green-tea-price" class="price" style="display: none;">Price: $4.75</div>
+        <div id="milk-tea-price" class="price" style="display: none;">Price: $5.25</div>
       </div>
-    </div>
-        
-      
-      
-    <div class="green msg">
-        <div></div>
-      <div class="drinks">
-           <h1 style="text-align:center">DRINKS</h1>
-          <?php foreach ($drinks as $item): ?>
-      <p>
-        <span class="item-name"> <strong><?php echo $item['item_name']; ?></strong></span>
-        <span class="item-price">$<?php echo $item['item_price']; ?></span><br>
-        <span class="item_type"><i><?php echo $item['item_type']; ?></i></span>
-        <hr>
-      </p>
-    <?php endforeach; ?>
-      </div>
-    </div>
-      
-      
-       <div class="blue msg">
-          
-      <div class="mainDish">
-           <h1 style="text-align:center">MAIN DISHES</h1>
-          <?php foreach ($mainDishes as $item): ?>
-      <p>
-        <span class="item-name"> <strong><?php echo $item['item_name']; ?></strong></span>
-        <span class="item-price">$<?php echo $item['item_price']; ?></span><br>
-        <span class="item_type"><i><?php echo $item['item_type']; ?></i></span>
-        <hr>
-      </p>
-    <?php endforeach; ?>
-      </div>
-             
-           
-     
-      <div class="sideDish">
-           <h1 style="text-align:center">SIDE DISHES</h1>
-          <?php foreach ($sides as $item): ?>
-      <p>
-        <span class="item-name"> <strong><?php echo $item['item_name']; ?></strong></span>
-        <span class="item-price">$<?php echo $item['item_price']; ?></span><br>
-        <span class="item_type"><i><?php echo $item['item_type']; ?></i></span>
-        <hr>
-      </p>
-    <?php endforeach; ?>
-      </div>
-            
-      
-      <div class="drinks">
-           <h1 style="text-align:center">DRINKS</h1>
-          <?php foreach ($drinks as $item): ?>
-      <p>
-        <span class="item-name"> <strong><?php echo $item['item_name']; ?></strong></span>
-        <span class="item-price">$<?php echo $item['item_price']; ?></span><br>
-        <span class="item_type"><i><?php echo $item['item_type']; ?></i></span>
-        <hr>
-      </p>
-    <?php endforeach; ?>
-      </div>
-          
+
+      <div class="category" style="flex-basis: 20%;">
+        <h2>Soft Drinks</h2>
+        <ul>
+          <li onclick="showPrice('Juices-price')">Juiced</li>
+          <li onclick="showPrice('Sodas-price')">Sodas</li>
+          <li onclick="showPrice('Bottled-water-price')">Bottled water</li>
+          <li onclick="showPrice('Kombucha-price')">Kombucha</li>
+        </ul>
+        <div id="Juices-price" class="price" style="display: none;">Price: $3.00</div>
+        <div id="Sodas-price" class="price" style="display: none;">Price: $2.50</div>
+        <div id="Bottled-water-price" class="price" style="display: none;">Price: $1.50</div>
+        <div id="Kombucha-price" class="price" style="display: none;">Price: $4.00</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
   <!-- End menu Section -->
 
 
@@ -257,7 +238,7 @@ mysqli_close($link);
   <div class="about container">
     <div class="col-right">
         <h1 class="section-title" >About <span>Us</span></h1>
-        <h2>COFFE RUSH Company History:</h2>
+        <h2>Northside Company History:</h2>
  <p>Northside  was founded in 2009 by Fleur Studd and Jason Scheltus. It's hard to fathom now, but at that time, finding fresh, in-season, traceable, high quality coffee in Melbourne (or Australia) was practically impossible. We wanted to help address that and, in doing so, ignite positive change in the industry by redefining what coffee was and could be, and to build a market for, and appreciation of, high quality specialty coffee.</p>
  <p>We built our first shop and roastery in the wonderful, bustling Prahran Market. We fell in love with this location for many reasons, the most important being that it allows us to engage with a community of shoppers who are seeking out quality produce, and who care about seasonality and provenance. Over the last decade and a half we have slowly grown to six shops, each located in very special neighbourhoods in Melbourne - from Carlton to the Queen Victoria Market, South Melbourne to the 'Paris end' of Collins Street. In each of these locations, we have built meaningful, ongoing relationships with the area's unique community, and we've made hundreds of beautiful coffees for thousands of wonderful customers.</p>
  <p>We realised early on that we wanted to deliver Melbourne's best coffee experience and to do this, we needed to put all our energy into sourcing, roasting and sharing the very best coffee we could find. Our goal was to make these coffees accessible and exciting, easy to understand and appreciate, and simple to brew and enjoy.</p>
@@ -321,7 +302,7 @@ mysqli_close($link);
   <section id="footer">
     <div class="footer container">
         <div class="brand">
-          <h1>Brekki on the House</h1>
+
       </div>
         <h2>Follow our Socials</h2>
       <div class="social-icon">
@@ -374,28 +355,108 @@ mysqli_close($link);
         background: #fff;
       }
 
-      /* Styling the select button */
-   .menu-category {
-  font-size: 24px;
+      /* General styling for the Menu Section */
+#menu {
+  background-color: #f8f8f8; /* Light background */
+  padding: 60px 20px; /* Add padding for spacing */
+  text-align: center;
+}
+
+#menu h1 {
+  font-size: 36px; /* Increase the font size for the main title */
+  color: #333; /* Darker color for the title */
+  font-family: 'Copperplate', sans-serif; /* Apply the same font family */
+  margin-bottom: 40px; /* Add some space below the title */
+}
+
+.menu-category {
+  margin-bottom: 50px; /* Add space between the categories */
+}
+
+.menu-category h2 {
+  font-size: 28px; /* Larger font size for the category name */
+  color: #b5651d; /* A soft brown color that fits the cafe theme */
+  margin-bottom: 20px; /* Space below the category heading */
+  font-family: 'Montserrat', sans-serif; /* Stylish font */
+}
+
+.menu-category ul {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0;
+  margin: 0;
+}
+
+.menu-category li {
+  font-size: 20px; /* Font size for menu items */
+  color: #555; /* Darker text color for visibility */
+  padding: 10px 0; /* Space between items */
+  border-bottom: 1px solid #ddd; /* Line between items */
+}
+
+.menu-category li:last-child {
+  border-bottom: none; /* Remove the bottom border for the last item */
+}
+
+.menu-category li:hover {
+  color: #b5651d; /* Change the color on hover to the brown theme */
+  cursor: pointer; /* Add pointer cursor on hover */
+  background-color: #f0e4d7; /* Soft background color on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+/* Grid layout for Menu Categories */
+.menu-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  gap: 20px; /* Space between grid items */
+  max-width: 1200px; /* Maximum width for the section */
+  margin: 0 auto; /* Center the section */
+}
+
+.menu-category {
+  padding: 20px;
+  background-color: #fff; /* White background for each category */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  border-radius: 8px; /* Slightly rounded corners */
+}
+
+.menu-category h2 {
+  border-bottom: 2px solid #b5651d; /* Brown line under the category name */
+  padding-bottom: 10px; /* Space below the category name */
+}
+
+.menu-category ul {
+  padding-left: 0; /* Remove default padding */
+}
+
+/* Styling for the container of the entire section */
+.menu-section {
+  margin: 50px auto;
+  max-width: 1000px;
+}
+
+/* Styling the list items within the category */
+.menu-category ul li {
   padding: 10px;
-  border: 2px solid black; /* Red border */
-  outline: none;
+  border-bottom: 1px solid #ddd; /* Add a border between items */
+}
+
+/* On hover, change the background and text color */
+.menu-category ul li:hover {
+  background-color: #f7e7d3;
+  color: #b5651d;
   cursor: pointer;
-  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-  color: #000; /* Black text */
-  background-color: #fff; /* White background */
-  border-radius: 0; /* No border radius (sharp corners) */
 }
-
-/* Style the option text in the select dropdown */
-.menu-category option {
-  font-size: 20px;
-}
-
-/* Hover effect */
-.menu-category:hover {
-  background-color: black; /* Red background on hover */
-  color: white; /* Black text on hover */
+/* Styling for price display */
+.price {
+  font-size: 1.5em; /* Increase font size */
+  font-weight: bold; /* Make font bold */
+  color: #b5651d; /* Use a contrasting color, like a brown shade */
+  padding: 10px; /* Add some padding for spacing */
+  background-color: #f0e4d7; /* Light background color for better contrast */
+  border-radius: 5px; /* Rounded corners for the background */
+  margin-top: 10px; /* Space above the price */
+  display: inline-block; /* Ensure it fits its content */
 }
 
       /* Use CSS Grid to create three columns */
@@ -643,6 +704,20 @@ $(document).ready(function() {
       $(this).find('.tooltip').css('display', 'none');
     });
   });
+  function showPrice(priceId) {
+  // Hide all prices first
+  var prices = document.getElementsByClassName('price');
+  for (var i = 0; i < prices.length; i++) {
+    prices[i].style.display = 'none';
+  }
+
+  // Show the selected price
+  var priceElement = document.getElementById(priceId);
+  if (priceElement) {
+    priceElement.style.display = 'block';
+  }
+}
+
 </script>
 
 

@@ -1,13 +1,21 @@
+
+
+
 <?php
 // Include your database connection code here
-require_once "../config.php"; 
+require_once "../config.php";
 session_start();
+// After successfully validating the user credentials
+
+$_SESSION['user_id'] = $user['user_id'];
+$_SESSION['username'] = $user['username'];
+$_SESSION['role'] = $user['role'];  // Store role in session
 
 // Define variables for email and password
 $email = $password = "";
 $email_err = $password_err = "";
 
-// Check if the form was submitted.
+// Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate email
     if (empty(trim($_POST["email"]))) {
@@ -26,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check input errors before checking authentication
     if (empty($email_err) && empty($password_err)) {
         // Prepare a select statement
-        $sql = "SELECT * FROM users WHERE email = ?";
+        $sql = "SELECT user_id, password FROM users WHERE email = ?";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
@@ -40,36 +48,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Get the result
                 $result = mysqli_stmt_get_result($stmt);
 
-                // Check if a matching record was found.
+                // Check if a matching record was found
                 if (mysqli_num_rows($result) == 1) {
                     // Fetch the result row
                     $row = mysqli_fetch_assoc($result);
 
                     // Verify the password
-                    if ($password === $row["password"]) {
-                        // Password is correct, start a new session and redirect the user to a dashboard or home page.
+                    if (password_verify($password, $row["password"])) {
+                        // Password is correct, start a new session and redirect the user to the dashboard page
                         $_SESSION["loggedin"] = true;
                         $_SESSION["email"] = $email;
+                        $_SESSION["user_id"] = $row['user_id'];
 
-                        // Query to get user details
-                        $sql_user = "SELECT * FROM users WHERE user_id = " . $row['user_id'];
-                        $result_user = mysqli_query($link, $sql_user);
-
-                        if ($result_user) {
-                            $user_row = mysqli_fetch_assoc($result_user);
-
-                            if ($user_row) {
-                                $_SESSION["user_id"] = $user_row["user_id"];
-                                header("location: ../home/customerhome.php"); // Redirect to the home page
-                                exit;
-                            } else {
-                                // No user details found
-                                $password_err = "No user details found for this account.";
-                            }
-                        } else {
-                            // Error in user query
-                            $password_err = "Error fetching user details: " . mysqli_error($link);
-                        }
+                        // Redirect to the dashboard page
+                        header("location: menu.php");
+                        exit;
                     } else {
                         // Password is incorrect
                         $password_err = "Invalid password. Please try again.";
@@ -88,15 +81,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-   
-   <style>
+    <style>
         body {
             font-family: 'Montserrat', sans-serif;
             display: flex;
@@ -104,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             align-items: center;
             height: 100vh;
             margin: 0; /* Remove default margin */
-            background-color:black;
+            background-color: black;
             background-image: url('../image/loginBackground.jpg'); /* Set the background image path */
             background-size: cover;
             background-position: center;
@@ -114,15 +104,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .background-video { 
             position: fixed;
-             top: 0;
+            top: 0;
             left: 0; 
             width: 100%;
             height: 100%; 
             z-index: -1; 
             overflow: hidden;
-         }
-          .background-video video 
-          {
+        }
+        .background-video video {
             position: absolute;
             top: 50%;
             left: 50%; 
@@ -130,8 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             min-height: 100%; 
             transform: translate(-50%, -50%); 
             object-fit: cover;
-         }
-
+        }
         .login_wrapper {
             width: 400px; /* Adjust the container width as needed */
             padding: 20px;
@@ -139,29 +127,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-
         h2 {
             text-align: center;
             font-family: 'Montserrat', serif;
         }
-
         p {
             font-family: 'Montserrat', serif;
         }
-
         .form-group {
             margin-bottom: 15px; /* Add space between form elements */
-          
         }
-
         ::placeholder {
             font-size: 12px; /* Adjust the font size as needed */
         }
-        
-        .text-danger{
+        .text-danger {
             font-size: 13px;
+            color: red;
         }
-
         .btn {
             width: 100%;
             padding: 10px;
@@ -170,16 +152,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #fff;
             cursor: pointer;
         }
-
         .btn:hover {
             background-color: #444;
         }
-
         label {
             display: block;
             margin-bottom: 5px;
         }
-
         input[type="email"],
         input[type="password"] {
             width: 95%;
@@ -187,13 +166,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-
         .nav-link {
             text-decoration: none;
             color: black;
             text-align: center;
         }
-
         .register-link {
             text-decoration: none;
             color: black;
@@ -205,33 +182,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 <div class="background-video">
     <video autoplay muted loop>
-        <source src="../image/coffeebeans.mp4" type="video/mp4"></video></div>
-    <div class="login-container">
-    <div class="login_wrapper">
-        <a class="nav-link" href="../home/home.php#hero"> <h1 class="text-center" style="font-family:Copperplate;">Northside Cafe</h1><span class="sr-only"></span></a>
-    
-        <div class="wrapper">
-           
-        <form action="login.php" method="post">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" class="form-control" placeholder="Enter User Email" required>
-                <span class="text-danger"><?php echo $email_err; ?></span>
-            </div>
-
-           <div class="form-group">
-    <label>Password</label>
-    <input type="password" name="password" class="form-control" placeholder="Enter User Password" required>
-    <span class="text-danger"><?php echo $password_err; ?></span>
+        <source src="../image/coffeebeans.mp4" type="video/mp4">
+    </video>
 </div>
-            <button class="btn btn-dark" style="background-color:black;" type="submit" name="submit" value="Login">Login</button>
-            
-        </form>
-
-            <p style="margin-top:1em;"><a href="register.php" class="register-link">Don't have an account? Proceed to Register</a></p>
-            <p style="margin-top:1em;"><a href="reset-password.php" class="register-link">Forget Password</a></p>
+<div class="login-container">
+    <div class="login_wrapper">
+        <a class="nav-link" href="../home/home.php#hero">
+            <h1 class="text-center" style="font-family:Copperplate;">Northside Cafe</h1>
+        </a>
+        <div class="wrapper">
+            <form action="login.php" method="post">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="Enter User Email" required>
+                    <span class="text-danger"><?php echo $email_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Enter User Password" required>
+                    <span class="text-danger"><?php echo $password_err; ?></span>
+                </div>
+                <button class="btn" type="submit">Login</button>
+            </form>
+            <p style="margin-top:1em;">
+                <a href="register.php" class="register-link">Don't have an account? Proceed to Register</a>
+            </p>
+            <p style="margin-top:1em;">
+                <a href="reset-password.php" class="register-link">Forget Password</a>
+            </p>
         </div>
     </div>
-    </div>
+</div>
 </body>
 </html>

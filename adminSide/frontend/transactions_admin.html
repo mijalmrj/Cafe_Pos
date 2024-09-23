@@ -8,7 +8,7 @@
 
 	</head>
 
-	<body>
+	<body class="manage-body">
         <script src="js/script.js"></script>
         <div class="container">
 
@@ -16,7 +16,7 @@
             <header class="navbar">
                 <div class="navhome">
                     <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
-                    <a href="index.php"><h2>Northside Café</h2></a>
+                    <a href="index.html"><h2>Northside Café</h2></a>
                 </div>
                 <div class="navlinks">
                     <div class="adminlinks">
@@ -48,19 +48,17 @@
                             <th></th>
                         </tr>
 
-                        <tr class="menu-item">
-                            <td id="transaction-date">09-09-2024</td>
-                            <td id="transaction-order">Cafe Latte</td>
-                            <td id="transaction-price">$5.00</td>
-                            <td id="transaction-staff">KS</td>
-                            <td><img src="logos/printer_beige.png" id="transactions-printer"></td>
-                        </tr>
+
                         
                     </table>
                 </div>
             
             </div>
         </div>
-        
+        <!-- Script path -->
+        <script src="js/transactions.js"></script>
+        <script>
+            generateTransReports();
+        </script>
     </body>
 </html>

@@ -1,82 +1,43 @@
 <?php
-// Including database connection code here
 require_once "../config.php";
-session_start();
 
-// Define variables and initialize them to empty values
-$email = $username = $password = $Contact_number = "";
-$email_err = $username_err = $password_err = $Contact_number_err = "";
+$email = $password = "";
+$email_err = $password_err = "";
 
-// Check if the form was submitted.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validate email
     if (empty(trim($_POST["email"]))) {
-        $email_err = "Please enter your email.";
+        $email_err = "Please enter an email.";
     } else {
         $email = trim($_POST["email"]);
     }
 
-    // Validate user name
-    if (empty(trim($_POST["member_name"]))) {
-        $username_err = "Please enter your user name.";
-    } else {
-        $username = trim($_POST["member_name"]);
-    }
-
-    // Validate password
     if (empty(trim($_POST["password"]))) {
         $password_err = "Please enter a password.";
-    } elseif (strlen(trim($_POST["password"])) < 6) {
-        $password_err = "Password must have at least 6 characters.";
     } else {
         $password = trim($_POST["password"]);
     }
 
-    // Validate phone number
-    if (empty(trim($_POST["Contact_number"]))) {
-        $Contact_number_err = "Please enter your phone number.";
-    } else {
-        $Contact_number = trim($_POST["Contact_number"]);
-    }
+    if (empty($email_err) && empty($password_err)) {
+        $sql = "INSERT INTO users (email, password) VALUES (?, ?)";
 
-    // Check input errors before inserting into the database
-    if (empty($email_err) && empty($username_err) && empty($password_err) && empty($Contact_number_err)) {
-        // Start a transaction
-        mysqli_begin_transaction($link);
+        if ($stmt = mysqli_prepare($link, $sql)) {
+            mysqli_stmt_bind_param($stmt, "ss", $param_email, $param_password);
 
-        // Prepare an insert statement for users table
-        $sql_users = "INSERT INTO users (email, username, password, Contact_number) VALUES (?, ?, ?, ?)";
-        if ($stmt_users = mysqli_prepare($link, $sql_users)) {
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt_users, "ssss", $param_email, $param_username, $param_password, $param_Contact_number);
-
-            // Set parameters
             $param_email = $email;
-            $param_username = $username;
-            // Store the password as plain text (not recommended for production)
-            $param_password = $password;
-            $param_Contact_number = $Contact_number;
+            $param_password = password_hash($password, PASSWORD_DEFAULT);
 
-            // Attempt to execute the prepared statement
-            if (mysqli_stmt_execute($stmt_users)) {
-                // Commit the transaction
-                mysqli_commit($link);
-
-                // Registration successful, redirect to the login page
-                header("location: register_process.php");
-                exit;
+            if (mysqli_stmt_execute($stmt)) {
+                echo "Registration successful.";
             } else {
-                // Rollback the transaction if there was an error
-                mysqli_rollback($link);
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Something went wrong. Please try again.";
             }
 
-            // Close the statement
-            mysqli_stmt_close($stmt_users);
+            mysqli_stmt_close($stmt);
         }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

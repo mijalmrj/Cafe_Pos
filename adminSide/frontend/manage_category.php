@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body>
+<body class="manage-body">
     <script src="js/script.js"></script>
     <div class="container">
         <!-- Navigation bar -->
         <header class="navbar">
             <div class="navhome">
                 <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
-                <a href="index.php"><h2>Northside Café</h2></a>
+                <a href="index.html"><h2>Northside Café</h2></a>
             </div>
             <div class="navlinks">
                 <div class="adminlinks">

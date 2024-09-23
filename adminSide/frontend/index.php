@@ -49,7 +49,7 @@
 
                             echo '<a href="' . $menu_url . '">';
                             echo '<div class="menu-box-item">';
-                            echo '<img src="display_image.php?id=' . $row["category_id"] . '" title="' . $row["category_name"] . '">';
+                            echo '<img src="../display_image.php?id=' . $row["category_id"] . '" title="' . $row["category_name"] . '">';
                             echo '<h3>' . $row["category_name"] . '</h3>';
                             echo '</div>';
                             echo '</a>';
