@@ -1,15 +1,7 @@
-
-
-
 <?php
 // Include your database connection code here
 require_once "../config.php";
-session_start();
-// After successfully validating the user credentials
-
-$_SESSION['user_id'] = $user['user_id'];
-$_SESSION['username'] = $user['username'];
-$_SESSION['role'] = $user['role'];  // Store role in session
+session_start(); // Start the session
 
 // Define variables for email and password
 $email = $password = "";
@@ -33,8 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check input errors before checking authentication
     if (empty($email_err) && empty($password_err)) {
-        // Prepare a select statement
-        $sql = "SELECT user_id, password FROM users WHERE email = ?";
+        // Prepare a select statement to fetch user_id, password, and role
+        $sql = "SELECT user_id, password, role FROM users WHERE email = ?";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
@@ -53,14 +45,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Fetch the result row
                     $row = mysqli_fetch_assoc($result);
 
-                    // Verify the password
-                    if (password_verify($password, $row["password"])) {
-                        // Password is correct, start a new session and redirect the user to the dashboard page
+                    if ($password === $row["password"]) {
+                        // Password is correct, start a new session and store the necessary user details in the session
                         $_SESSION["loggedin"] = true;
-                        $_SESSION["email"] = $email;
                         $_SESSION["user_id"] = $row['user_id'];
+                        $_SESSION["email"] = $email;
+                        $_SESSION["role"] = $row['role']; // Store role in session
 
-                        // Redirect to the dashboard page
+                        // Redirect to the menu page
                         header("location: menu.php");
                         exit;
                     } else {
@@ -81,6 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -199,11 +199,10 @@ if($link->connect_error){ //if not Connection
             setTimeout(function () {
                 window.location.href = direction; // Replace with your desired URL
             }, 3000); // 3000 milliseconds = 3 seconds
-        } this is my loginprocess page adjust the chnages according to the limitations you sugeested 
+        }
 
         // Hide the message card after 3 seconds (adjust the delay as needed)
         setTimeout(hidePopup, 3000);
     </script>
 </body>
 </html>
-

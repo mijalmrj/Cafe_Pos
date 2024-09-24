@@ -18,13 +18,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($email_err) && empty($password_err)) {
+        // SQL statement without hashing the password
         $sql = "INSERT INTO users (email, password) VALUES (?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             mysqli_stmt_bind_param($stmt, "ss", $param_email, $param_password);
 
             $param_email = $email;
-            $param_password = password_hash($password, PASSWORD_DEFAULT);
+            $param_password = $password;  // No password hashing here
 
             if (mysqli_stmt_execute($stmt)) {
                 echo "Registration successful.";
@@ -37,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>

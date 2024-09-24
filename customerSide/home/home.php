@@ -137,10 +137,19 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         <ul>
           <li><a href="#hero" data-after="Home">Home</a></li>
           
-          <li><a href="#projects" data-after="menu">Menu</a></li>
+          <li><a href="#menu" data-after="menu">Menu</a></li>
           <li><a href="#about" data-after="About">About</a></li>
           <li><a href="#contact" data-after="Contact">Contact</a></li>
-          <li><a href="../../adminSide/StaffLogin/login.php" data-after="Staff">Staff</a></li>
+          <li class="dropdown">
+  <a href="#" class="dropbtn">Users</a>
+  <div class="dropdown-content">
+    <a href="../../adminSide/StaffLogin/login.php">Staff</a>
+    <a href="../../adminSide/AdminLogin/login.php">Admin</a>
+    <a href="../../adminSide/CashierLogin/login.php">Cashier/Waiter</a>
+    <a href="../customerLogin/login.php">Customer</a>
+  </div>
+</li>
+
           
       </div>
     </div>
@@ -154,58 +163,33 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 // Get the user_id from the query parameters
 $user_id = $_SESSION['user_id'] ?? null; // Change this to the way you obtain the member ID
 
-// Create a query to retrieve the user's information
-//$query = "SELECT member_name, points FROM membershipships WHERE memberships_id = $memberships_id";
-
-// Execute the query
-//$result = mysqli_query($link, $query);
-
 // Check if the user is logged in
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && $user_id != null) {
-    $query = "SELECT username, points FROM users WHERE user_id = $user_id";
+    $query = "SELECT username FROM users WHERE user_id = $user_id";
 
-// Execute the query
-$result = mysqli_query($link, $query);
-    // If logged in, show "Logout" link
+    // Execute the query
+    $result = mysqli_query($link, $query);
+    
     // Check if the query was successful
     if ($result) {
-        // Fetch the member's information
+        // Fetch the user's information
         $row = mysqli_fetch_assoc($result);
         
         if ($row) {
-            $username = $row['member_name'];
-            $points = $row['points'];
+            $username = $row['username'];
             
-            // Calculate VIP status
-            $vip_status = ($points >= 1000) ? 'VIP' : 'Regular';
-            
-            // Define the VIP tooltip text
-            $vip_tooltip = ($vip_status === 'Regular') ? ($points < 1000 ? (1000 - $points) . ' points to VIP ' : 'You are eligible for VIP') : '';
-            
-            // Output the member's information
-            echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px; padding:5px; color:white; '>$username</p>";
-            echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px;padding:5px;color:white; '>$points Points </p>";
-            echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px;padding:5px; color:white; '>$vip_status";
-            
-            // Add the tooltip only for Regular status
-            if ($vip_status === 'Regular') {
-                echo " <span class='tooltip'>$vip_tooltip</span>";
-            }
-            
-            echo "</p>";
+            // Output the user's information
+            echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px; padding:5px; color:white;'>$username</p>";
         } else {
-            echo "Member not found.";
+            echo "User not found.";
         }
     } else {
         echo "Error: " . mysqli_error($link);
     }
 
     echo '<a class="logout-link" style="color: white; font-size:1.3em;" href="../customerLogin/logout.php">Logout</a>';
-} else {
-    // If not logged in, show "Login" link
-    echo '<a class="signin-link" style="color: white; font-size:15px;" href="../customerLogin/register.php">Sign Up </a> ';
-    echo '<a class="login-link" style="color: white; font-size:15px; " href="../customerLogin/login.php">Log In</a>';
 }
+
 
 // Close the database connection
 mysqli_close($link);
@@ -237,8 +221,10 @@ mysqli_close($link);
         <div>
             <h1><strong><h1 class="text-center" style="font-family:Copperplate; color:brown;"> Northside </h1><span></span></strong></h1>
             <h1><strong style="color:brown;">CAFE<span></span></strong></h1>
-            <a type        1.  SteakOnGrillCloseup
-="button" class="cta" onclick="myFunction()">Order Now</a>
+            <ul><li><a type="button" class="cta" href="../customerLogin/login.php"> Login to Order</a>
+</li>
+          <li> <a type="button" class ="cta" href="../customerLogin/register.php">New user? Click here to Sign up</a></p>
+          </li> </ul>
             <script>
 function myFunction() {
   var r = confirm("Please login first!");
