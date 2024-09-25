@@ -16,17 +16,17 @@ if ($link->connect_error) {
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the values from the form
-    $username = $_POST["member_name"];
+    $username = $_POST["username"];
     $points = $_POST["points"];
 
-    // Prepare the SQL query to check if the member_name already exists
-    $check_query = "SELECT member_name FROM membershipships WHERE member_name = ?";
+    // Prepare the SQL query to check if the username already exists
+    $check_query = "SELECT username FROM membershipships WHERE username = ?";
     $check_stmt = $link->prepare($check_query);
     $check_stmt->bind_param("s", $username);
     $check_stmt->execute();
     $check_result = $check_stmt->get_result();
 
-    // Check if the member_name already exists
+    // Check if the username already exists
     if ($check_result->num_rows > 0) {
         $message = "The member name is already in use.<br>Please try again to choose a different member name.";
         $iconClass = "fa-times-circle";
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bgColor = "#FFA7A7"; // Custom background color for error
     } else {
         // Prepare the SQL query for insertion
-        $insert_query = "INSERT INTO membershipships (member_name, points) 
+        $insert_query = "INSERT INTO membershipships (username, points) 
                         VALUES (?, ?)";
         $stmt = $link->prepare($insert_query);
 

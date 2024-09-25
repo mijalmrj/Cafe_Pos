@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cash Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cash Calculator</h1>
+        <label for="amount-paid">Amount Paid:</label>
+        <input type="number" id="amount-paid" placeholder="Enter amount paid" />
+        
+        <h2 id="change-message"></h2>
+        <button id="calculate-change">Calculate Change</button>
+    </div>
+
+    <script>
+        document.getElementById('calculate-change').addEventListener('click', function() {
+            const amountPaid = parseFloat(document.getElementById('amount-paid').value);
+            const totalAmount = parseFloat(localStorage.getItem("totalAmount")); // Assuming total amount is stored in local storage
+            
+            if (isNaN(amountPaid) || isNaN(totalAmount)) {
+                alert("Please enter a valid amount paid.");
+                return;
+            }
+
+            const change = amountPaid - totalAmount;
+            document.getElementById('change-message').innerText = `Change: $${change >= 0 ? change.toFixed(2) : 'Not enough amount'}`;
+
+            // If payment is successful, redirect back to confirmation page to print the receipt
+            if (change >= 0) {
+                // You may want to store the payment confirmation in local storage or a session
+                localStorage.setItem("paymentStatus", "completed");
+                setTimeout(() => {
+                    window.location.href = 'confirmation.html'; // Redirect back to confirmation page
+                }, 3000); // Redirect after 3 seconds for better user experience
+            }
+        });
+    </script>
+</body>
+</html>

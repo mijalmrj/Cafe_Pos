@@ -1,9 +1,13 @@
 <?php
 require_once "../config.php";
 
-$order_id = $_GET['order_id'];
+if (isset($_GET['order_id'])) {
+    $order_id = $_GET['order_id'];
+} else {
+    die("Order ID not provided.");
+}
 
-$sql = "SELECT * FROM orders WHERE order_id = ?";
+$sql = "SELECT * FROM `order` WHERE order_id = ?";
 if ($stmt = mysqli_prepare($link, $sql)) {
     mysqli_stmt_bind_param($stmt, "i", $order_id);
     mysqli_stmt_execute($stmt);
@@ -18,5 +22,7 @@ if ($stmt = mysqli_prepare($link, $sql)) {
     }
 
     mysqli_stmt_close($stmt);
+} else {
+    echo "Error in query: " . mysqli_error($link);
 }
 ?>

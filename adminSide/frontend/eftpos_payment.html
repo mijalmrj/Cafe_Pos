@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EFTPOS Payment</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Proceed with EFTPOS Payment</h1>
+        <p>Please follow the instructions on the EFTPOS machine to complete your payment.</p>
+        <button id="complete-payment">Payment Completed</button>
+    </div>
+
+    <script>
+        document.getElementById('complete-payment').addEventListener('click', function() {
+            // Store payment status
+            localStorage.setItem("paymentStatus", "completed");
+            window.location.href = 'confirmation.html'; // Redirect back to confirmation page
+        });
+    </script>
+</body>
+</html>

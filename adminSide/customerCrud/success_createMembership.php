@@ -17,7 +17,7 @@ if ($link->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the values from the form
     $user_id = $_POST["user_id"];
-    $username = $_POST["member_name"];
+    $username = $_POST["username"];
     $points = $_POST["points"];
     $memberships_id = $_POST["memberships_id"];
     $email = $_POST["email"];
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Insert Data into membershipships Table
-        $insert_membershipship_query = "INSERT INTO membershipships (user_id, member_name, points, memberships_id) VALUES (?, ?, ?, ?)";
+        $insert_membershipship_query = "INSERT INTO membershipships (user_id, username, points, memberships_id) VALUES (?, ?, ?, ?)";
         $stmt_membershipship = $link->prepare($insert_membershipship_query);
         $stmt_membershipship->bind_param("issi", $user_id, $username, $points, $memberships_id);
 

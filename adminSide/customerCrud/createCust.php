@@ -106,8 +106,8 @@ $next_memberships_id = getNextAvailablemembershipsID($link);
         </div>
         
         <div class="form-group">
-            <label for="member_name" class="form-label">Member Name :</label>
-            <input type="text" name="member_name" placeholder="Johnny Hatsoff" class="form-control <?php echo $username_err ? 'is-invalid' : ''; ?>" id="member_name" required value="<?php echo $username; ?>"><br>
+            <label for="username" class="form-label">Member Name :</label>
+            <input type="text" name="username" placeholder="Johnny Hatsoff" class="form-control <?php echo $username_err ? 'is-invalid' : ''; ?>" id="username" required value="<?php echo $username; ?>"><br>
             <div class="invalid-feedback">
                 Please provide a valid member name.
             </div>

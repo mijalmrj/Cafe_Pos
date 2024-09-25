@@ -60,7 +60,7 @@ $iceDrinksItems = mysqli_fetch_all($resultIceDrinks, MYSQLI_ASSOC);
 session_start();
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     echo '<div class="user-profile">';
-    echo 'Welcome, ' . $_SESSION["member_name"] . '!';
+    echo 'Welcome, ' . $_SESSION["username"] . '!';
     echo '<a href="../customerProfile/profile.php">Profile</a>';
     echo '</div>';
 }

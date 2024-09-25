@@ -18,12 +18,12 @@
             </div>
             <div class="navlinks">
                 <div class="adminlinks">
-                    <a href="settings.html"><img src="../logos/settings.png"></a>
-                    <a href="report.html"><img src="../logos/analytics.png"></a>
+                    <a href="../settings.html"><img src="../logos/settings.png"></a>
+                    <a href="../report.html"><img src="../logos/analytics.png"></a>
                 </div>
                 <div class="generallinks">
-                    <a href="transactions_admin.html"><img src="../logos/print.png"></a>
-                    <a href="user.html"><img src="../logos/user.png"></a>
+                    <a href="../transactions_admin.html"><img src="../logos/print.png"></a>
+                    <a href="../user.html"><img src="../logos/user.png"></a>
                 </div>
             </div>
         </header>

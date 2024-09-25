@@ -14,6 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['cart'][] = $product_id;
     }
     
-    header("Location: view_orders.php");
+    header("Location: view_cart.php");
 }
 ?>

@@ -1,95 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<head>
-		
-		<title>Index</title>
-		<link rel="stylesheet" href="css/styles.css">
+<head>
+    <title>Index</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/paymentMethod.js" defer></script> <!-- Load JavaScript -->
+</head>
 
-	</head>
-
-	<body class="gradient-background">
-        <div class="container">
-
-             <!--Navigation bar-->
-             <header class="navbar">
-                <div class="navhome">
-                    <a href="index.html"><img src="logos/home.png" id="coffee-logo"></a>
-                    <a href="index.html"><h2>Northside Café</h2></a>
+<body class="gradient-background">
+    <div class="container">
+        <!--Navigation bar-->
+        <header class="navbar">
+            <div class="navhome">
+                <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
+                <a href="index.php">
+                    <h2>Northside Café</h2>
+                </a>
+            </div>
+            <div class="navlinks">
+                <div class="adminlinks">
+                    <a href="settings.html"><img src="logos/settings.png"></a>
+                    <a href="report.html"><img src="logos/analytics.png"></a>
                 </div>
-                <div class="navlinks">
-                    <div class="adminlinks">
-                        <a href="settings.html"><img src="logos/settings.png"></a>
-                        <a href="report.html"><img src="logos/analytics.png"></a>
-                    </div>
-                    <div class="generallinks">
-                        <a href="transactions_admin.html"><img src="logos/print.png"></a>
-                        <a href="user.html"><img src="logos/user.png"></a>
-                    </div>
-                </div>
-            </header>
-
-
-            <div class="main">
-
-                <!--Menu box--> 
-                <div class="menu-box">
-                    <div class="title-bar"><h1>CATEGORIES</h1></div>
-                    <div class="menu-box-grid">
-                        <a href="coffee_menu.html">
-                            <div class="menu-box-item">
-                                <img src="images/coffees_image.png" title="coffees">
-                                <h3>Coffees</h3>
-                            </div>
-                        </a>
-                        
-                        <a href="iced_drinks_menu.html">
-                            <div class="menu-box-item">
-                                <img src="images/iced_drinks_image.png" title="iced_drinks">
-                                <h3>Iced drinks</h3>
-                            </div>
-                        </a>
-
-                        <a href="tea_menu.html">
-                            <div class="menu-box-item">
-                                <img src="images/teas_image.png" title="teas">
-                                <h3>Teas</h3>
-                            </div>
-                        </a>
-
-                        <a href="soft_drinks_menu.html">
-                            <div class="menu-box-item">
-                                <img src="images/soft_drinks.png" title="soft_drinks">
-                                <h3>Soft drinks</h3>
-                            </div>
-                        </a>
-                        
-                    </div>
-                </div>
-
-                <!--Order summary-->
-                <div class="order-box">
-                    <div class="order-box-inner">
-                        <div class="order-number"></div>
-                        <hr>
-                        <div class="order-info"></div>
-                        <hr>
-                        <div class="payment-method">
-                            <h2>Payment method</h2>
-
-                            <img src="logos/cash_icon.png">
-                            <img src="logos/card_icon.png">
-                        </div>
-
-                    </div>
-                    <!-- Form for payment -->
-                    <form action="confirmed.html">
-                        <button class="order-button" id="order-button">Place order <img src="logos/arrow.png" id="order-arrow"></button>
-                    </form>
-
-                    </div>
+                <div class="generallinks">
+                    <a href="transactions_admin.html"><img src="logos/print.png"></a>
+                    <a href="user.html"><img src="logos/user.png"></a>
                 </div>
             </div>
+        </header>
+
+        <div class="main">
+            <!--Menu box-->
+            <div class="menu-box">
+                <div class="title-bar">
+                    <h1>CATEGORIES</h1>
+                </div>
+                <div class="menu-box-grid">
+                    <a href="coffee_menu.html">
+                        <div class="menu-box-item">
+                            <img src="images/coffees_image.png" title="coffees">
+                            <h3>Coffees</h3>
+                        </div>
+                    </a>
+
+                    <a href="iced_drinks_menu.html">
+                        <div class="menu-box-item">
+                            <img src="images/iced_drinks_image.png" title="iced drinks">
+                            <h3>Iced Drinks</h3>
+                        </div>
+                    </a>
+
+                    <a href="tea_menu.html">
+                        <div class="menu-box-item">
+                            <img src="images/teas_image.png" title="teas">
+                            <h3>Teas</h3>
+                        </div>
+                    </a>
+
+                    <a href="soft_drinks_menu.html">
+                        <div class="menu-box-item">
+                            <img src="images/soft_drinks.png" title="soft drinks">
+                            <h3>Soft Drinks</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!--Order summary-->
+            <div class="order-box">
+                <div class="order-box-inner">
+                    <div class="order-number"></div>
+                    <hr>
+                    <div class="order-info"></div>
+                    <hr>
+                    <div class="payment-method">
+                        <h2>Payment Method</h2>
+                        <div class="payment-options">
+                            <div class="cash-option defaultPaymentBtn">Cash</div>
+                            <div class="card-option defaultPaymentBtn">Card</div>
+                        </div>
+                        <img src="logos/cash_icon.png">
+                        <img src="logos/card_icon.png">
+
+                        <!-- Cash Calculator -->
+                        <div id="cash-calculator" class="calculator" style="display: none;">
+                            <h3>Enter Amount Received:</h3>
+                            <input type="number" id="cash-amount" placeholder="Amount" />
+                            <button id="calculate-change">Calculate Change</button>
+                            <div id="change-display"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Form for payment -->
+                <form action="confirmed.html">
+                    <button type="submit" class="order-button" id="order-button">Place Order <img src="logos/arrow.png" id="order-arrow"></button>
+                </form>
+            </div>
         </div>
-    </body>
+    </div>
+    <style>
+        .calculator {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .calculator input {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script>
+        // JavaScript for handling cash calculator display and calculation
+        document.addEventListener("DOMContentLoaded", function () {
+            const cashOption = document.querySelector(".cash-option");
+            const cashCalculator = document.getElementById("cash-calculator");
+            const cashAmountInput = document.getElementById("cash-amount");
+            const changeDisplay = document.getElementById("change-display");
+            const calculateChangeButton = document.getElementById("calculate-change");
+
+            // Show the cash calculator when Cash option is clicked
+            cashOption.addEventListener("click", function () {
+                cashCalculator.style.display = "block";
+            });
+
+            // Calculate change when button is clicked
+            calculateChangeButton.addEventListener("click", function () {
+                const totalOrderAmount = 20; // Set this to your actual total order amount
+                const cashReceived = parseFloat(cashAmountInput.value);
+                if (!isNaN(cashReceived) && cashReceived >= totalOrderAmount) {
+                    const change = cashReceived - totalOrderAmount;
+                    changeDisplay.textContent = `Change to return: $${change.toFixed(2)}`;
+                } else {
+                    changeDisplay.textContent = "Please enter a valid amount.";
+                }
+            });
+        });
+    </script>
+</body>
+
 </html>

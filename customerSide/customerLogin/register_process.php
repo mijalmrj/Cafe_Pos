@@ -13,7 +13,7 @@ $link = new mysqli(DB_HOST,DB_USER,DB_PASS,DB_NAME);
  $iconClass = "fa-check-circle";
  $cardClass = "alert-success";
  $bgColor = "#D4F4DD";
- $direction = "login.php"; // Success, go to staff panel
+ $direction = "login.php";
 
 //Check COnnection
 if($link->connect_error){ //if not Connection
