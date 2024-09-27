@@ -110,11 +110,13 @@
     let size = '',
         milk = '';
     let selectionImg, selectionPrice = 0,
+        selectionId,
         selectionName = '';
 
     window.onload = function() {
         const url = window.location.search;
         let params = new URLSearchParams(url);
+        let id = params.get('id');
         let title = params.get('title');
         let price = params.get('price');
 
@@ -129,6 +131,7 @@
 
             const next = img.nextElementSibling;
         };
+        selectionId = Number(id);
         selectionName = title;
         selectionPrice = price;
     }
@@ -189,8 +192,9 @@
         orderDetails.sugar = sugarCheckbox.checked;
         orderDetails.sugarText = sugar ? 'With Sugar' : 'No Sugar';
 
-        orderDetails.cost = size === 'large' ? selectionPrice + 1 : selectionPrice;
+        orderDetails.cost = size === 'large' ? Number(selectionPrice) + 1 : selectionPrice;
         orderDetails.size = size;
+        orderDetails.id = selectionId;
         orderDetails.milk = milk;
         orderDetails.imgSrc = selectionImg;
         orderDetails.name = selectionName;

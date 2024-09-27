@@ -34,7 +34,7 @@
 
         <?php
         include "../config.php";
-        $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
+        $category_id = isset($_GET['category_id']);
         echo "<script>console.log('PHP Value: " . addslashes($category_id) . "');</script>";
         if ($category_id > 0) {
             $stmt = $link->prepare("SELECT * FROM products WHERE category_id = ?");
@@ -98,15 +98,26 @@
     </div>
 </body>
 
+<script src="js/cartUpdater.js"></script>
+
+<!-- Script path -->
+<script src="js/paymentMethod.js"></script>
 <!-- Script file -->
 <script>
+    updateCart();
+    enablePaymentUpdate();
+    updateColor();
+
     function sendImage(imageNumber) {
-        // console.log(imageNumber)
         const img = document.getElementById('img' + imageNumber);
-        console.log(img)
+        const id = imageNumber;
         const imgSrc = encodeURIComponent(img.src);
-        const h3 = img.nextElementSibling;
-        window.location.href = `customization_menu.html?imgSrc=${imgSrc}&title=${h3.innerHTML}`;
+        const h3 = img.nextElementSibling.innerHTML.split('<br>');
+
+        const title = h3[0].trim().replace('<br>', '');
+        const price = parseFloat(h3[1].replace('$', '').trim());
+
+        window.location.href = `customization_menu.html?imgSrc=${imgSrc}&id=${id}&title=${title}&price=${price}`;
     }
 </script>
 
