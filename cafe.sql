@@ -111,7 +111,7 @@ INSERT INTO `categories` (`category_id`, `category_name`, `Description`, `image`
 --
 
 CREATE TABLE `order` (
-  `order_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
   `total_amount` decimal(10,2) NOT NULL,
   `shipping_method` enum('pick up','deliver','','') NOT NULL,
   `shipping_time` datetime NOT NULL,
@@ -137,7 +137,7 @@ INSERT INTO `order` (`order_id`, `total_amount`, `shipping_method`, `shipping_ti
 --
 
 CREATE TABLE `order_detail` (
-  `order_detail_id` int(11) NOT NULL,
+  `order_detail_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_type` varchar(50) NOT NULL,
   `size` enum('small','medium','large','') NOT NULL,
   `quantity` decimal(10,2) NOT NULL,
@@ -208,7 +208,7 @@ INSERT INTO `products` (`product_id`, `product_name`, `Description`, `Price`, `c
 --
 
 CREATE TABLE `sales` (
-  `sale_id` int(11) NOT NULL,
+  `sale_id` int(11) NOT NULL AUTO_INCREMENT,
   `sale_date` date NOT NULL,
   `total_amount` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -220,7 +220,7 @@ CREATE TABLE `sales` (
 --
 
 CREATE TABLE `sale_detail` (
-  `sale_detail` int(11) NOT NULL,
+  `sale_detail` int(11) NOT NULL AUTO_INCREMENT,
   `quantity` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

@@ -2,7 +2,7 @@
 // process_order.php
 
 // Database connection details
-$hostname = "localhost";
+$hostname = "localhost:3390";
 $username = "root";
 $password = ""; 
 $dbname = "Cafe"; 
