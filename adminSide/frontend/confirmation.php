@@ -1,62 +1,50 @@
 <?php
-// Database connection details
-$hostname = "localhost";
-$username = "root";
-$password = ""; 
-$dbname = "Cafe"; 
+session_start();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include '../config.php';
 
-// Create connection
-$link = new mysqli($hostname, $username, $password, $dbname);
+    $userId = $_SESSION['logged_user_id'];
 
-// Check connection
-if ($link->connect_error) {
-    die("Connection failed: " . $link->connect_error);
-}
+    $data = json_decode(file_get_contents('php://input'), true);
 
-// Get order ID from the query string
-$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
+    // Extract order and order details
+    $order = $data['order'];
+    $orderDetails = $data['orderDetails'] ?? null;
 
-// Fetch order details from the database
-$sql = "SELECT * FROM `order` WHERE `order_id` = ?";
-$stmt = $link->prepare($sql);
-$stmt->bind_param("i", $order_id);
-$stmt->execute();
-$result = $stmt->get_result();
+    if ($order == null) {
+        echo "Order is null";
+    }
 
-// Check if the order exists
-if ($result->num_rows === 0) {
-    $order = null;
+    // Insert into 'order' table
+    $stmt = $link->prepare("INSERT INTO `order` (user_id, total_amount, shipping_method, shipping_time, shipping_location, order_status) VALUES (?,?, ?, ?, ?, ?)");
+
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($link->error));
+    }
+
+    $stmt->bind_param("idssss", $userId, $order['totalAmount'], $order['shippingMethod'], $order['shippingTime'], $order['shippingLocation'], $order['orderStatus']);
+
+    if ($stmt->execute()) {
+        // Get the last inserted order ID
+        $orderId = $stmt->insert_id;
+        $stmtDetails = $link->prepare("INSERT INTO `order_detail` (order_id,product_id, order_type, size, quantity) VALUES (?, ?, ?, ?)");
+
+        if ($stmtDetails === false) {
+            die('Prepare failed for order details: ' . htmlspecialchars($link->error));
+        }
+
+        foreach ($orderDetails as $item) {
+            $stmtDetails->bind_param("isss", $orderId, $item['name'], $item['size'], $item['no']);
+            $stmtDetails->execute();
+        }
+
+        header("Location: index.php");
+
+        exit();
+    } else {
+
+        die('Execute failed: ' . htmlspecialchars($stmt->error));
+    }
 } else {
-    $order = $result->fetch_assoc();
+    echo "Invalid request method.";
 }
-
-// Close statement and connection
-$stmt->close();
-$link->close();
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Order Confirmation</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body class="gradient-background">
-    <div class="container">
-        <div class="order-confirmation">
-        <?php if ($order === null): ?>
-            <h1>Order not found</h1>
-            <p>We could not find the order you are looking for.</p>
-        <?php else: ?>
-            <h1>Order Confirmation</h1>
-            <p><strong>Order ID:</strong> <?php echo htmlspecialchars($order['order_id']); ?></p>
-            <p><strong>Total Amount:</strong> $<?php echo htmlspecialchars($order['total_amount']); ?></p>
-            <p><strong>Shipping Method:</strong> <?php echo htmlspecialchars($order['shipping_method']); ?></p>
-            <p><strong>Shipping Time:</strong> <?php echo htmlspecialchars($order['shipping_time']); ?></p>
-            <p><strong>Shipping Location:</strong> <?php echo htmlspecialchars($order['shipping_location']); ?></p>
-            <p><strong>Order Status:</strong> <?php echo htmlspecialchars($order['order_status']); ?></p>
-        <?php endif; ?>
-        </div>
-    </div>
-</body>
-</html>

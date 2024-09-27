@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Confirmed Order</title>
     <link rel="stylesheet" href="css/styles.css">
@@ -60,17 +61,21 @@
             margin-top: 20px;
             font-size: 1.5em;
             color: #333;
-            display: none; /* Initially hidden */
+            display: none;
+            /* Initially hidden */
         }
     </style>
 </head>
+
 <body class="receipt-body">
     <div class="container">
         <!-- Navigation bar -->
         <header class="navbar">
             <div class="navhome">
                 <a href="index.html"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
-                <a href="index.html"><h2>Northside Café</h2></a>
+                <a href="index.html">
+                    <h2>Northside Café</h2>
+                </a>
             </div>
             <div class="generallinks">
                 <a href="transactions_admin.html"><img src="logos/print.png"></a>
@@ -89,9 +94,12 @@
             <div class="receipt-box">
                 <h1 class="order-confirmed">Order Confirmed</h1>
                 <div class="receipt-details">
-                    <h2 id="receipt-orderno">Order #12345</h2> <!-- Order number placeholder -->
-                    <div id="receipt-orderdetails"></div> <!-- Receipt details -->
-                    <h2 id="receipt-orderamount"></h2> <!-- Total amount -->
+                    <h2 id="receipt-orderno"></h2>
+
+                    <div id="receipt-orderdetails"></div>
+                    <!-- Receipt details -->
+                    <h2 id="receipt-orderamount"></h2>
+                    <!-- Total amount -->
                 </div>
             </div>
 
@@ -103,7 +111,16 @@
     </div>
 
     <script>
-        // Function to create receipt items dynamically
+        let itemList = [];
+        window.onload = function() {
+            itemList = JSON.parse(localStorage.getItem("cart"));
+
+            calculateTotal();
+            generateReceiptData();
+
+            handleReceiptOption(true);
+        }
+
         function createReceiptItem(itemDetails) {
             let itemContainer = document.createElement("div");
             itemContainer.className = "addedOrderInfo";
@@ -122,11 +139,9 @@
             return itemContainer;
         }
 
-        // Function to generate receipt data
         function generateReceiptData() {
             let receiptElement = document.getElementById("receipt-orderdetails");
             receiptElement.innerHTML = "";
-            let itemList = JSON.parse(localStorage.getItem("cart"));
             if (!itemList || itemList.length === 0) {
                 receiptElement.innerHTML = "<p>No items in the order.</p>";
                 return;
@@ -137,61 +152,53 @@
             });
         }
 
-        // Function to calculate total amount
         function calculateTotal() {
             let totElement = document.getElementById("receipt-orderamount");
-            let itemList = JSON.parse(localStorage.getItem("cart"));
+            totElement.innerHTML = "Total: $0";
             if (!itemList || itemList.length === 0) {
-                totElement.innerHTML = "Total: $0";
                 return;
             }
-            let total = itemList.map(item => item.cost).reduce((a, b) => a + b, 0);
+            let total = itemList.map(item => item.cost).reduce((a, b) => Number(a) + Number(b), 0);
+            console.log(total)
             totElement.innerHTML = `Total: $${total}`;
         }
 
-        // Function to send order data to the backend (PHP script)
         function sendOrderDataToBackend(orderData) {
-            fetch("save_order.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(orderData)
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log("Order saved to database: ", data);
-            })
-            .catch(error => {
-                console.error("Error saving order:", error);
-            });
+            console.log(orderData)
+            fetch("confirmation.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(orderData)
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // window.location.href = `index.php`;
+                    console.log(data)
+                })
+                .catch(error => {
+                    console.error("Error saving order:", error);
+                });
         }
 
-        // Unified function to handle receipt display and send data to backend
         function handleReceiptOption(print) {
-            // Check payment status
-            const paymentStatus = localStorage.getItem("paymentStatus");
-            if (paymentStatus !== "completed") {
-                alert("Please complete your payment first.");
-                return;
-            }
-
-            generateReceiptData(); // Generate receipt data
-            calculateTotal(); // Calculate total
-
-            // Prepare order data to send to backend
             let orderData = {
-                items: JSON.parse(localStorage.getItem("cart")),
-                orderNumber: document.getElementById("receipt-orderno").innerText,
-                totalAmount: document.getElementById("receipt-orderamount").innerText
+                order: {
+                    totalAmount: document.getElementById("receipt-orderamount").innerText.replace("Total: $", ""),
+                    shippingMethod: "Dine in",
+                    shippingTime: new Date().toISOString(),
+                    shippingLocation: "NorthSide Cafe",
+                    orderStatus: "Confirmed"
+                },
+                orderDetails: JSON.parse(localStorage.getItem("cart"))
             };
 
-            sendOrderDataToBackend(orderData); // Send order to the backend
+            sendOrderDataToBackend(orderData);
 
             if (print) {
-                downloadReceipt(); // Download receipt if YES
+                downloadReceipt();
             } else {
-                // If NO, display thank you message
                 document.getElementById("thank-you-message").style.display = "block";
                 document.querySelector(".payment-option").style.display = "none"; // Hide payment options
             }
@@ -203,7 +210,9 @@
             let totalAmount = document.getElementById("receipt-orderamount").innerHTML;
             let receiptData = `<h1>Receipt</h1>${receiptContent}<p>${totalAmount}</p>`;
 
-            let blob = new Blob([receiptData], { type: "text/html" });
+            let blob = new Blob([receiptData], {
+                type: "text/html"
+            });
             let link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = "receipt.html";
@@ -230,4 +239,8 @@
         });
     </script>
 </body>
+
 </html>
+
+</html>
+
