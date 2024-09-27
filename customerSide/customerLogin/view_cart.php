@@ -18,29 +18,35 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
     $sql = "SELECT * FROM products WHERE product_id IN ($cart_ids)";
     $result = mysqli_query($link, $sql);
     
-    if (mysqli_num_rows($result) > 0) {
+    if ($result && mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $cart_items[] = $row;
-            $total_amount += $row['Price']; // Assuming 'Price' is the column name for the price
+            $cart_items[] = $row; // Add product details to cart_items array
+            $total_amount += $row['Price']; // Summing up the total amount
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
     <style>
-        /* Add your styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
         .cart-item {
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 15px;
             margin: 10px 0;
-            background-color: #f9f9f9;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .cart-item p {
             margin: 5px 0;
@@ -59,9 +65,14 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
         }
         .btn:hover {
             background-color: #a04d1c;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -74,10 +85,10 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
             echo "<div class='cart-item'>";
             echo "<h3>" . htmlspecialchars($item['product_name']) . "</h3>";
             echo "<p><strong>Description:</strong> " . htmlspecialchars($item['Description']) . "</p>";
-            echo "<p><strong>Price:</strong> $" . htmlspecialchars($item['Price']) . "</p>";
+            echo "<p><strong>Price:</strong> $" . number_format($item['Price'], 2) . "</p>";
             echo "</div>";
         }
-        echo "<div class='cart-item'>";
+        echo "<div class='cart-item total'>";
         echo "<h3>Total Amount: $" . number_format($total_amount, 2) . "</h3>";
         echo "</div>";
     } else {
@@ -87,7 +98,7 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
 
     <a href="place_order.php" class="btn">Proceed to Checkout</a>
 
-    <form action="clear_cart.php" method="post">
+    <form action="clear_cart.php" method="post" style="display: inline;">
         <button type="submit" class="btn">Clear Cart</button>
     </form>
 </body>
