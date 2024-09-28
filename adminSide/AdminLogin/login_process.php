@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['logged_username'] = $logged_username;
             
             //Directly go to the pos panel upon successful login
-            header("Location: ../frontend/index.php");
+            header("Location: admindashboard.php");
             exit;
             
         } else {

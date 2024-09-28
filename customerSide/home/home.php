@@ -160,7 +160,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
        
   <?php
 
-// Get the user_id from the query parameters
+// Get the user_id from the query parameters`
 $user_id = $_SESSION['user_id'] ?? null; // Change this to the way you obtain the member ID
 
 // Check if the user is logged in

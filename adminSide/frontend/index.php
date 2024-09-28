@@ -1,3 +1,13 @@
+<?php
+session_start(); // Start the session to access user role
+
+// Include database configuration
+include "../config.php";
+
+// Assuming the user role is stored in the session
+$user_role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,19 +29,21 @@
             </div>
             <div class="navlinks">
                 <div class="adminlinks">
-                    <a href="settings.html"><img src="logos/settings.png"></a>
-                    <a href="report.html"><img src="logos/analytics.png"></a>
-                </div>
+
+                        <a href="settings.html"><img src="logos/settings.png" alt="Settings"></a>
+                        <a href="report.html"><img src="logos/analytics.png" alt="Report"></a>
+
+                    </div>
                 <div class="generallinks">
-                    <a href="transactions.html"><img src="logos/print.png"></a>
-                    <a href="user.html"><img src="logos/user.png"></a>
-                </div>
+
+                        <a href="transactions.html"><img src="logos/print.png" alt="Transactions"></a>
+                        <a href="user.html"><img src="logos/user.png" alt="User"></a>
+
+                    </div>
             </div>
         </header>
 
         <?php
-        include "../config.php";
-
         $sql = "SELECT * FROM categories";
         $result = $link->query($sql);
         ?>
@@ -41,26 +53,39 @@
                 <div class="title-bar">
                     <h1>CATEGORIES</h1>
                 </div>
+                
                 <div class="menu-box-grid">
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $menu_url = 'menu.php?category_id=' . $row["category_id"];
+                    <a href="coffee_menu.html">
+                        <div class="menu-box-item">
+                            <img src="images/coffees_image.png" title="coffees">
+                            <h3>Coffees</h3>
+                        </div>
+                    </a>
 
-                            echo '<a href="' . $menu_url . '">';
-                            echo '<div class="menu-box-item">';
-                            echo '<img src="display_image.php?id=' . $row["category_id"] . '" title="' . $row["category_name"] . '">';
-                            echo '<h3>' . $row["category_name"] . '</h3>';
-                            echo '</div>';
-                            echo '</a>';
-                        }
-                    } else {
-                        echo '<p>No categories found.</p>';
-                    }
+                    <a href="iced_drinks_menu.html">
+                        <div class="menu-box-item">
+                            <img src="images/iced_drinks_image.png" title="iced drinks">
+                            <h3>Iced Drinks</h3>
+                        </div>
+                    </a>
 
-                    $link->close();
-                    ?>
+                    <a href="tea_menu.html">
+                        <div class="menu-box-item">
+                            <img src="images/teas_image.png" title="teas">
+                            <h3>Teas</h3>
+                        </div>
+                    </a>
+
+                    <a href="soft_drinks_menu.html">
+                        <div class="menu-box-item">
+                            <img src="images/soft_drinks.png" title="soft drinks">
+                            <h3>Soft Drinks</h3>
+                        </div>
+                    </a>
                 </div>
+            </div>
+                    
+            </div>
             </div>
 
             <!-- Order summary -->
@@ -72,8 +97,8 @@
                     <hr>
                     <div class="payment-method">
                         <h2>Payment method</h2>
-                        <img src="logos/cash_icon.png">
-                        <img src="logos/card_icon.png">
+                        <img src="logos/cash_icon.png" alt="Cash">
+                        <img src="logos/card_icon.png" alt="Card">
                     </div>
                 </div>
                 <div class="order-button">
@@ -87,12 +112,9 @@
 
 </html>
 <script src="js/cartUpdater.js"></script>
-
-<!-- Script path -->
 <script src="js/paymentMethod.js"></script>
-
 <script>
     updateCart();
     enablePaymentUpdate();
     updateColor();
-    </script>
+</script>

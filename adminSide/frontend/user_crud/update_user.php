@@ -1,15 +1,19 @@
 <?php
-// Include database configuration
-require_once '../../config.php'; // Adjust the path as necessary
 
-// Initialize variables
+require_once '../../config.php'; 
+
+// If we deployed northside cafe pos, we would store this key securely (in AWS Secrets Manager or environment variables)
+// For simplicity in sending project to our teachers, it is hardcoded here.
+$encryption_key = 'e954bdd837af6f46fdd159c53285c8e19002d1b0b2e49c301379e0a8a9df7601'; 
+
+//  variables
 $user_id = "";
 $username = "";
 $role = "";
 $email = "";
 $contact_number = "";
 
-// Check if form is submitted
+// check if form is submitted corectly
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_id = $_POST['user_id'];
     $username = $_POST['username'];
@@ -17,32 +21,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $contact_number = $_POST['contact_number'];
 
-    // Update user details
-    $sql = "UPDATE users SET username=?, role=?, Email=?, Contact_number=? WHERE user_id=?";
-    $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, 'ssssi', $username, $role, $email, $contact_number, $user_id);
+    //  generate a secure random IV for AES encryption
+    $encryption_iv = random_bytes(16); 
 
-    if (mysqli_stmt_execute($stmt)) {
+    // encrypting  email
+    $encrypted_email = openssl_encrypt($email, 'AES-128-CTR', $encryption_key, 0, $encryption_iv);
+
+    // converting  IV 
+    $iv_hex = bin2hex($encryption_iv);
+
+    // Update user details
+    $sql = "UPDATE users SET username=?, role=?, Email=?, Contact_number=?, iv=? WHERE user_id=?";
+    $query = mysqli_prepare($link, $sql); 
+    mysqli_stmt_bind_param($query, 'sssssi', $username, $role, $encrypted_email, $contact_number, $iv_hex, $user_id);
+
+    if (mysqli_stmt_execute($query)) {
         echo "<p>User updated successfully!</p>";
     } else {
         echo "<p>Error updating user: " . mysqli_error($link) . "</p>";
     }
 
-    mysqli_stmt_close($stmt);
+    mysqli_stmt_close($query); 
 }
 
-// Fetch user details for the given ID
+// Fetch user details for the given ID (including decryption of email)
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
-    $sql = "SELECT username, role, Email, Contact_number FROM users WHERE user_id=?";
-    $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, 'i', $user_id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $username, $role, $email, $contact_number);
-    mysqli_stmt_fetch($stmt);
-    mysqli_stmt_close($stmt);
+    $sql = "SELECT username, role, Email, Contact_number, iv FROM users WHERE user_id=?";
+    $query = mysqli_prepare($link, $sql); 
+    mysqli_stmt_bind_param($query, 'i', $user_id);
+    mysqli_stmt_execute($query);
+    mysqli_stmt_bind_result($query, $username, $role, $encrypted_email, $contact_number, $iv_hex);
+    mysqli_stmt_fetch($query);
+    mysqli_stmt_close($query);
+
+    // Convert the IV from hexadecimal back to binary
+    $encryption_iv = hex2bin($iv_hex);
+
+    // Decrypt the email using the stored IV and encryption key
+    $email = openssl_decrypt($encrypted_email, 'AES-128-CTR', $encryption_key, 0, $encryption_iv);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

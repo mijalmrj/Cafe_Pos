@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashier/Waiter Login</title>
+    <title>Admin Login</title>
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -76,7 +76,7 @@
 <body>
     <div class="wrapper">
         <a href="../../customerSide/home/home.php" class="close-button">&times;</a>
-        <h2>Cashier/Waiter Login</h2>
+        <h2>Admin Login</h2>
         <?php 
         if(!empty($login_err)){
             echo '<div class="alert alert-danger">' . $login_err . '</div>';

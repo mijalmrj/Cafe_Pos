@@ -255,7 +255,7 @@ VALUES
         'Espresso',
         'Rich and intense espresso shot.',
         3.50,
-        2
+        
     ),
     (
         8,
@@ -351,78 +351,31 @@ CREATE TABLE `users` (
     `password` varchar(255) NOT NULL,
     `role` enum('Admin', 'Staff', 'Cashier', 'customer') NOT NULL,
     `Email` varchar(100) NOT NULL,
-    `Contact_number` int(11) NOT NULL
+    `Contact_number` int(11) NOT NULL,
+    `iv` varchar(32) DEFAULT NULL -- IV for email encryption
+
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 --
 -- Dumping data for TABLE `users`
 -- 
-INSERT INTO
-    `users` (
-        `user_id`,
-        `username`,
-        `password`,
-        `role`,
-        `Email`,
-        `Contact_number`
-    )
-VALUES
-    (
-        1,
-        'Smriti',
-        '$2y$10$z/NT6WJeevYv.t7Kb2bISOtxbfnsNn5UKUuxiURhognrvrOVnnCaC',
-        'Admin',
-        'Smritishrestha579@gmail.com',
-        412512512
-    ),
-    (
-        2,
-        'Mijal',
-        '2mijal@',
-        'Admin',
-        'mijalmrj231@gmail.com',
-        421212121
-    ),
-    (
-        3,
-        'John',
-        '3john@',
-        'Staff',
-        'johnjohn3@gmail.com',
-        452314448
-    ),
-    (
-        4,
-        'Eva',
-        '4eva@',
-        'Staff',
-        'evaeva223@gmail.com',
-        45289637
-    ),
-    (
-        5,
-        'Anup',
-        '5anup@',
-        'Cashier',
-        'anupgreen23@gmail.com',
-        45232145
-    ),
-    (
-        7,
-        'customer',
-        'customer',
-        'customer',
-        'customer@gmail.com',
-        452163788
-    ),
-    (
-        8,
-        '22',
-        '123456789',
-        'Admin',
-        'Aasthastha143@gmail.com',
-        222
-    ) -- 
+INSERT INTO `users` (`user_id`, `username`, `password`, `role`, `Email`, `Contact_number`, `iv`) VALUES
+(1, 'Smriti', '$2y$10$z/NT6WJeevYv.t7Kb2bISOtxbfnsNn5UKUuxiURhognrvrOVnnCaC', 'Admin', 'Smritishrestha579@gmail.com', 412512512, NULL),
+(2, 'Mijal', '2mijal@', 'Admin', 'mijalmrj231@gmail.com', 421212121, NULL),
+(3, 'John', '3john@', 'Staff', 'johnjohn3@gmail.com', 452314448, NULL),
+(4, 'Eva', '4eva@', 'Staff', 'evaeva223@gmail.com', 45289637, NULL),
+(5, 'Anup', '5anup@', 'Cashier', 'anupgreen23@gmail.com', 45232145, NULL),
+(7, 'customer', 'customer', 'customer', 'customer@gmail.com', 452163788, NULL),
+(8, '22', '123456789', 'Admin', 'Aasthastha143@gmail.com', 222, NULL),
+(0, '8', '$2y$10$e.JVUHAT0ho5rMj.CbN5VeuXHgUeOGptZzI2C91Xro9h0h1W6rJEK', 'Admin', 'roshanikc4164@gmail.com', 4341, NULL),
+(0, 'Smriti Shrestha', 'k210259', 'Admin', 'smritishrestha579@gmail.com', 406807637, NULL),
+(0, 'Smriti Shrestha', 'Smriti123', 'Admin', 'smritishrestha579@gmail.com', 406807637, NULL),
+(0, 'Smriti', 'Smriti123', 'Admin', 'Smriti1@gmail.com', 406807637, NULL),
+(0, 'customer', 'customer', 'Admin', 'Customer@gmail.com', 123, NULL),
+(0, '', '$2y$10$oIxlq8m.srBSFwjYJPLauuRkzUfXZ7r1RYG8K1bEb8.0fc.4F.RrG', 'Admin', 'abc@gmail.com', 0, NULL),
+(0, '', '$2y$10$mBVpAhT6BFQgCgqqgFNDw.Nsv63wHe1XiVIwYeVBRisUK8s1YzJbu', 'Admin', 'a@gmail.com', 0, NULL);
+
+--- 
     CREATE TABLE transactions (
         transaction_id INT AUTO_INCREMENT PRIMARY KEY,
         order_id INT NOT NULL,
