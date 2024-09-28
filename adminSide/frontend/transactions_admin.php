@@ -12,7 +12,7 @@ $userId = $_SESSION['logged_user_id'];
 
 // Prepare SQL query
 $query = "
-    SELECT o.order_id, o.shipping_time, o.total_amount, od.order_type, od.size, od.quantity
+    SELECT o.order_id, o.shipping_time, o.total_amount, od.product_name, od.size, od.quantity
     FROM `order` o
     JOIN `order_detail` od ON o.order_id = od.order_id
     WHERE o.user_id = ?
@@ -48,7 +48,7 @@ if ($result->num_rows === 0) {
         echo "Order ID: " . htmlspecialchars($row['order_id']) . "<br>";
         echo "Shipping Time: " . htmlspecialchars($row['shipping_time']) . "<br>";
         echo "Total Amount: " . htmlspecialchars($row['total_amount']) . "<br>";
-        echo "Order Type: " . htmlspecialchars($row['order_type']) . "<br>";
+        echo "Product Name: " . htmlspecialchars($row['product_name']) . "<br>";
         echo "Size: " . htmlspecialchars($row['size']) . "<br>";
         echo "Quantity: " . htmlspecialchars($row['quantity']) . "<br>";
         echo "<hr>";

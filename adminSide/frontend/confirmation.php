@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($stmt->execute()) {
         // Get the last inserted order ID
         $orderId = $stmt->insert_id;
-        $stmtDetails = $link->prepare("INSERT INTO `order_detail` (order_id,product_id, order_type, size, quantity) VALUES (?,?, ?, ?, ?)");
+        $stmtDetails = $link->prepare("INSERT INTO `order_detail` (order_id,product_id, product_name, size, quantity) VALUES (?,?, ?, ?, ?)");
 
         if ($stmtDetails === false) {
             die('Prepare failed for order details: ' . htmlspecialchars($link->error));

@@ -144,7 +144,7 @@ VALUES
 -- 
 CREATE TABLE `order_detail` (
     `order_detail_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `order_type` varchar(50) NOT NULL,
+    `product_name` varchar(50) NOT NULL,
     `order_id` int(11) NOT NULL,
     `product_id` int(11) NOT NULL,
     `size` enum('small', 'medium', 'large') NOT NULL,
