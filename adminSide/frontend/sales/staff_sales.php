@@ -3,15 +3,14 @@ require_once "../../config.php";
 session_start();
 
 $userId = $_SESSION['logged_user_id'];
+
 // Prepare SQL query
 $query = "
-    SELECT o.order_id, o.shipping_time, o.total_amount, od.product_name, od.size, od.quantity
+    SELECT o.order_id, o.user_id, o.shipping_time, o.total_amount, od.product_id ,od.product_name, od.size
     FROM `order` o
     JOIN `order_detail` od ON o.order_id = od.order_id
     WHERE o.user_id = ?
 ";
-
-// Prepare the statement
 $stmt = $link->prepare($query);
 if (!$stmt) {
     die("Database query preparation failed: " . $link->error);
@@ -31,27 +30,28 @@ if (!$result) {
     die("Failed to retrieve results: " . $stmt->error);
 }
 
-// Check if any orders were found
-if ($result->num_rows === 0) {
-    echo "No orders found for this user.";
-} else {
-    // Fetch and process the results as needed
-    while ($row = $result->fetch_assoc()) {
-        // Process each row (e.g., display order details)
-        echo "Order ID: " . htmlspecialchars($row['order_id']) . "<br>";
-        echo "Shipping Time: " . htmlspecialchars($row['shipping_time']) . "<br>";
-        echo "Total Amount: " . htmlspecialchars($row['total_amount']) . "<br>";
-        echo "Product Name: " . htmlspecialchars($row['product_name']) . "<br>";
-        echo "Size: " . htmlspecialchars($row['size']) . "<br>";
-        echo "Quantity: " . htmlspecialchars($row['quantity']) . "<br>";
-        echo "<hr>";
+// Group orders by order_id
+$orders = [];
+while ($row = $result->fetch_assoc()) {
+    $orderId = $row['order_id'];
+    if (!isset($orders[$orderId])) {
+        $orders[$orderId] = [
+            'shipping_time' => $row['shipping_time'],
+            'total_amount' => $row['total_amount'],
+            'user_id' => $row['user_id'],
+            'items' => []
+        ];
     }
+    // Add product details to the items array
+    $orders[$orderId]['items'][] = [
+        'product_name' => $row['product_name'],
+        'size' => $row['size'],
+    ];
 }
 
 // Close the statement
 $stmt->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -99,14 +99,19 @@ $stmt->close();
                     </tr>
                     <?php
                     // Check if there are results and output them
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
+                    if (count($orders) > 0) {
+                        foreach ($orders as $orderId => $order) {
+                            // Display order details in a single row
                             echo "<tr>";
-                            echo "<td>" . htmlspecialchars($row['shipping_time']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['order_type']) . " (Size: " . htmlspecialchars($row['size']) . ", Qty: " . htmlspecialchars($row['quantity']) . ")</td>";
-                            echo "<td>$" . htmlspecialchars($row['total_amount']) . "</td>";
-                            echo "<td><!-- Staff Name --></td>";
-                            echo "<td><button onclick='printReceipt(" . htmlspecialchars($row['order_id']) . ")'>Print</button></td>";
+                            echo "<td>" . htmlspecialchars($order['shipping_time']) . "</td>";
+                            echo "<td>";
+                            foreach ($order['items'] as $item) {
+                                echo htmlspecialchars($item['product_name']) . " (Size: " . htmlspecialchars($item['size']) . ")<br>";
+                            }
+                            echo "</td>";
+                            echo "<td>$" . htmlspecialchars($order['total_amount']) . "</td>";
+                            echo "<td>" . htmlspecialchars($order['user_id']) . "</td>";
+                            echo "<td><button onclick='downloadReceipt(" . htmlspecialchars($orderId) . ")'>Print</button></td>";
                             echo "</tr>";
                         }
                     } else {
@@ -119,12 +124,7 @@ $stmt->close();
     </div>
 
     <script src="../js/transactions.js"></script>
+    <script src="../js/downloadReceipt.js"></script>
 </body>
 
 </html>
-
-
-
-<script src="../js/transactions.js">
-    generateTransReports();
-</script>

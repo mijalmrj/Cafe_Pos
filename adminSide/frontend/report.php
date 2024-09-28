@@ -3,7 +3,7 @@ session_start();
 require_once "../config.php"; // Assuming you have this file to connect to the database
 
 // Check if user is logged in and has the correct role
-if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], ['admin', 'staff'])) {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['Admin', 'Staff'])) {
     // If the user is not logged in or not staff/admin, redirect to the login page or an error page
     header("Location: ../stafflogin/login.php"); // Change this to your login page or error page
     exit;
