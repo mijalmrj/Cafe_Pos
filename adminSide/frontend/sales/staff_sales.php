@@ -1,7 +1,8 @@
 <?php
-require_once "../config.php";
+require_once "../../config.php";
 session_start();
 
+$userId = $_SESSION['logged_user_id'];
 // Prepare SQL query
 $query = "
     SELECT o.order_id, o.shipping_time, o.total_amount, od.product_name, od.size, od.quantity
@@ -57,26 +58,26 @@ $stmt->close();
 
 <head>
     <title>Transactions (Admin)</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body class="manage-body">
     <div class="container">
         <header class="navbar">
             <div class="navhome">
-                <a href="index.html"><img src="logos/home.png" id="coffee-logo"></a>
+                <a href="index.html"><img src="../logos/home.png" id="coffee-logo"></a>
                 <a href="index.html">
                     <h2>Northside Café</h2>
                 </a>
             </div>
             <div class="navlinks">
                 <div class="adminlinks">
-                    <a href="settings.html"><img src="logos/settings.png"></a>
-                    <a href="report.html"><img src="logos/analytics.png"></a>
+                    <a href="../settings.html"><img src="../logos/settings.png"></a>
+                    <a href="../report.html"><img src="../logos/analytics.png"></a>
                 </div>
                 <div class="generallinks">
-                    <a href="transactions_admin.html"><img src="logos/print.png"></a>
-                    <a href="user.html"><img src="logos/user.png"></a>
+                    <a href="../transactions_admin.html"><img src="../logos/print.png"></a>
+                    <a href="../user.html"><img src="../logos/user.png"></a>
                 </div>
             </div>
         </header>
@@ -117,13 +118,13 @@ $stmt->close();
         </div>
     </div>
 
-    <script src="js/transactions.js"></script>
+    <script src="../js/transactions.js"></script>
 </body>
 
 </html>
 
 
 
-<script src="js/transactions.js">
+<script src="../js/transactions.js">
     generateTransReports();
 </script>
