@@ -6,13 +6,14 @@ define('DB_USER','root');
 define('DB_PASS','');
 define('DB_NAME','Cafe');
 
-// Create Connection
-$link = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+//Create Connection
+$link = new mysqli(DB_HOST,DB_USER,DB_PASS,DB_NAME);
 
-// Check Connection
-if ($link->connect_error) { 
-    die('Connection Failed: ' . $link->connect_error); // kills the Connection
-}
+
+
+
+
+
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -20,50 +21,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $provided_user_id = $_POST['user_id'];
     $provided_password = $_POST['password'];
 
-    // Prepared statement to fetch user record based on provided user_id
-    $stmt = $link->prepare("SELECT * FROM users WHERE user_id = ?");
-    $stmt->bind_param("i", $provided_user_id); // Bind user_id as an integer
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Query to fetch staff record based on provided user_id
+    $query = "SELECT * FROM users WHERE user_id = '$provided_user_id'";
+    $result = $link->query($query);
 
     if ($result->num_rows === 1) {
         $row = $result->fetch_assoc();
         $stored_password = $row['password'];
-        $user_role = $row['role']; // Fetch user role from the database
 
-        // Check password
         if ($provided_password === $stored_password) {
-            // Password matches, login successful
+        // Password matches, login successful
 
-            // Store user information in session
+        // Check if the user_id exists in the Staffs table
+        $staff_query = "SELECT * FROM users WHERE user_id = '$provided_user_id'";
+        $staff_result = $link->query($staff_query);
+
+        if ($staff_result->num_rows === 1) {
+            $staff_row = $staff_result->fetch_assoc();
+            $logged_staff_name = $staff_row['username']; // Get staff_name
+            //$message = "Login successful.<br> Welcome to Northside Panel.";
+            //$iconClass = "fa-check-circle";
+            //$cardClass = "alert-success";
+            //$bgColor = "#D4F4DD";
+            //$direction = "../frontend/index.php"; // Success, go to staff panel
+            
+            // After successful login, store staff_name in session
             $_SESSION['logged_user_id'] = $provided_user_id;
-            $_SESSION['logged_username'] = $row['username']; // Fetch username
-            $_SESSION['role'] = $user_role; // Store user role
-
-            // Redirect based on role
-            if ($user_role === 'staff') {
-                header("Location: ../frontend/staff_dashboard.php"); // Staff dashboard
-            } elseif ($user_role === 'admin') {
-                header("Location: ../frontend/admin_dashboard.php"); // Admin dashboard
-            } elseif ($user_role === 'cashier') {
-                header("Location: ../frontend/cashier_dashboard.php"); // Cashier dashboard
-            } else {
-                header("Location: ../frontend/customer_dashboard.php"); // Customer dashboard
-            }
-            exit; // Exit after redirection
+            $_SESSION['logged`_username'] = $logged_username;
+            
+            //Directly go to the  cashier dashboard panel upon successful login
+            header("Location: cashierdashboard.php");
+            exit;
+            
         } else {
-            $message = "Incorrect password.<br>Please try again.";
+            // Staff ID not found in Staffs table
+            $message = "Staff ID not found.<br>Please try again to choose a correct Staff ID.";
+            $iconClass = "fa-times-circle";
+            $cardClass = "alert-danger";
+            $bgColor = "#FFA7A7"; // Custom background color for error
+            $direction = "login.php"; // Fail, go back to login
+            }      
+            
+        } else {
+            $message = "Incorrect password.<br>Please try again to type your password.";
+            $iconClass = "fa-times-circle";
+            $cardClass = "alert-danger";
+            $bgColor = "#FFA7A7"; // Custom background color for error
+            $direction = "login.php"; //Fail back to login
         }
     } else {
-        $message = "Staff ID not found.<br>Please try again.";
+        $message = "Staff ID not found.<br>Please try again to choose a correct Staff ID.";
+        $iconClass = "fa-times-circle";
+        $cardClass = "alert-danger";
+        $bgColor = "#FFA7A7";
+        $direction = "login.php"; //Fail back to login
     }
 }
-
-// Display any messages to the user
-if (isset($message)) {
-    echo "<div class='alert-danger'>$message</div>";
-}
-?>
+//Check COnnection
+if($link->connect_error){ //if not Connection
+    die('Connection Failed'.$link->connect_error);//kills the Connection OR terminate execution
+    }
+    ?>
 
 <!DOCTYPE html>
 <html>
@@ -103,19 +121,88 @@ if (isset($message)) {
             display: inline-block;
             margin: 0 auto;
         }
+        /* Additional CSS styles based on success/error message */
+        .alert-success {
+            /* Customize the styles for the success message card */
+            background-color: <?php echo $bgColor; ?>;
+        }
+        .alert-success i {
+            color: #5DBE6F; /* Customize the checkmark icon color for success */
+        }
         .alert-danger {
+            /* Customize the styles for the error message card */
             background-color: #FFA7A7; /* Custom background color for error */
         }
+        .alert-danger i {
+            color: #F25454; /* Customize the checkmark icon color for error */
+        }
+        .custom-x {
+            color: #F25454; /* Customize the "X" symbol color for error */
+            font-size: 100px;
+            line-height: 200px;
+        }
+            .alert-box {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .alert-icon {
+            padding-bottom: 20px;
+        }
+    
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1><?php echo isset($message) ? 'Error' : 'Success'; ?></h1>
-        <p><?php echo isset($message) ? $message : 'Login successful!'; ?></p>
+    <div class="card <?php echo $cardClass; ?>" style="display: none;">
+        <div style="border-radius: 200px; height: 200px; width: 200px; background: #F8FAF5; margin: 0 auto;">
+            <?php if ($iconClass === 'fa-check-circle'): ?>
+                <i class="checkmark">✓</i>
+            <?php else: ?>
+                <i class="custom-x" style="font-size: 100px; line-height: 200px;">✘</i>
+            <?php endif; ?>
+        </div>
+        <h1><?php echo ($cardClass === 'alert-success') ? 'Success' : 'Error'; ?></h1>
+        <p><?php echo $message; ?></p>
     </div>
 
+    <div style="text-align: center; margin-top: 20px;">Redirecting back in <span id="countdown">3</span></div>
+
     <script>
-        // Redirect logic can be placed here if needed
+        //Declare the direction of login success and fail 
+        var direction = "<?php echo $direction; ?>";
+        
+        // Function to show the message card as a pop-up and start the countdown
+        function showPopup() {
+            var messageCard = document.querySelector(".card");
+            messageCard.style.display = "block";
+
+            var i = 3;
+            var countdownElement = document.getElementById("countdown");
+            var countdownInterval = setInterval(function() {
+                i--;
+                countdownElement.textContent = i;
+                if (i <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = direction;
+                }
+            }, 1000); // 1000 milliseconds = 1 second
+        }
+
+        // Show the message card and start the countdown when the page is loaded
+        window.onload = showPopup;
+
+        // Function to hide the message card after a delay
+        function hidePopup() {
+            var messageCard = document.querySelector(".card");
+            messageCard.style.display = "none";
+            // Redirect to another page after hiding the pop-up (adjust the delay as needed)
+            setTimeout(function () {
+                window.location.href = direction; // Replace with your desired URL
+            }, 3000); // 3000 milliseconds = 3 seconds
+        }
+
+        // Hide the message card after 3 seconds (adjust the delay as needed)
+        setTimeout(hidePopup, 3000);
     </script>
 </body>
 </html>

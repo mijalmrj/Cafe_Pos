@@ -1,8 +1,12 @@
 <?php
-// Include database configuration
-require_once '../../config.php'; // Adjust the path as necessary
 
-// Query to select all users
+require_once '../../config.php'; 
+
+// In deploying northside cafe, we would store this key securely (like AWS Secrets Manager or environment variables)
+// For simplicity in this project  to deliver it to our teachers, it is hardcoded here.
+$encryption_key = 'e954bdd837af6f46fdd159c53285c8e19002d1b0b2e49c301379e0a8a9df7601'; 
+
+// Query to select all users, including the 'iv' column for decryption
 $sql = "SELECT user_id, username, role, Email, Contact_number FROM users";
 $result = mysqli_query($link, $sql);
 
@@ -85,13 +89,14 @@ $result = mysqli_query($link, $sql);
             echo '</thead>';
             echo '<tbody>';
 
-            // Fetch and display user details
+            // get and display user details
             while ($row = mysqli_fetch_assoc($result)) {
+                // decrypt the email using the stored IV
+
                 echo '<tr>';
                 echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['username']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['role']) . '</td>';
-                echo '<td>' . htmlspecialchars($row['Email']) . '</td>';
                 echo '<td>' . htmlspecialchars($row['Contact_number']) . '</td>';
                 echo '<td>
                         <a href="update_user.php?user_id=' . $row["user_id"] . '">EDIT</a> 

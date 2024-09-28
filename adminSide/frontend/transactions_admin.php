@@ -2,14 +2,6 @@
 require_once "../config.php";
 session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['logged_user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$userId = $_SESSION['logged_user_id'];
-
 // Prepare SQL query
 $query = "
     SELECT o.order_id, o.shipping_time, o.total_amount, od.order_type, od.size, od.quantity

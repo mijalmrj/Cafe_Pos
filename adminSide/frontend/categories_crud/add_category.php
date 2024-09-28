@@ -1,3 +1,7 @@
+<?php
+require_once '../../access_control.php'; 
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
