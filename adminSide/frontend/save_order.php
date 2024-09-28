@@ -16,15 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         foreach ($orderData['items'] as $item) {
             $orderType = $item['name']; // Assuming 'name' is the order type (e.g., coffee, latte)
             $size = $item['size']; // Assuming 'size' exists in the cart items
-            $quantity = $item['quantity'];
             $customFlavor = $item['sugarText']; // Assuming this holds the flavor/sweetness info
 
             // Insert into the order_detail table
-            $query = "INSERT INTO order_detail (order_type, size, quantity, Customize_flavor) VALUES (?, ?, ?, ?)";
+            $query = "INSERT INTO order_detail (order_type, size, Customize_flavor) VALUES (?, ?, ?, ?)";
 
             // Prepare and execute the query
             $stmt = $conn->prepare($query);
-            $stmt->bind_param("ssis", $orderType, $size, $quantity, $customFlavor);
+            $stmt->bind_param("ssis", $orderType, $size, $customFlavor);
 
             if ($stmt->execute()) {
                 echo "Order item saved successfully.";

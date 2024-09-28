@@ -144,11 +144,10 @@ VALUES
 -- 
 CREATE TABLE `order_detail` (
     `order_detail_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `order_type` varchar(50) NOT NULL,
+    `product_name` varchar(50) NOT NULL,
     `order_id` int(11) NOT NULL,
     `product_id` int(11) NOT NULL,
     `size` enum('small', 'medium', 'large') NOT NULL,
-    `quantity` decimal(10, 2) NOT NULL,
     `Customize_flavor` enum('Sweetness', 'milk') NOT NULL,
     FOREIGN KEY (order_id) REFERENCES `order`(order_id) ,
     FOREIGN KEY (product_id) REFERENCES `products`(product_id) 
