@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <header class="navbar">
         <div class="navhome">
             <a href="index.php"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
-            <a href="index.php"><h2>Northside Café</h2></a>
+            <a href="index.php"><h2>Northside Caf&eacute;</h2></a>
         </div>
         <div class="navlinks">
             <div class="adminlinks">

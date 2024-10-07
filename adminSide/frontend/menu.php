@@ -14,19 +14,19 @@
         <!--Navigation bar-->
         <header class="navbar">
             <div class="navhome">
-                <a href="index.html"><img src="logos/home.png" id="coffee-logo"></a>
-                <a href="index.html">
-                    <h2>Northside Café</h2>
+                <a href="index.php"><img src="logos/coffee_logo.png" id="coffee-logo"></a>
+                <a href="index.php">
+                    <h2>Northside Caf&eacute;</h2>
                 </a>
             </div>
             <div class="navlinks">
                 <div class="adminlinks">
                     <a href="settings.html"><img src="logos/settings.png"></a>
-                    <a href="report.html"><img src="logos/analytics.png"></a>
+                    <a href="sales/all_sales.php"><img src="logos/analytics.png"></a>
                 </div>
                 <div class="generallinks">
-                    <a href="transactions_admin.html"><img src="logos/print.png"></a>
-                    <a href="user.html"><img src="logos/user.png"></a>
+                    <a href="sales/staff_sales.php"><img src="logos/print.png"></a>
+                    <a href="user.php"><img src="logos/user.png"></a>
                 </div>
             </div>
         </header>
@@ -34,7 +34,7 @@
 
         <?php
         include "../config.php";
-        $category_id = isset($_GET['category_id']);
+        $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : null;
         echo "<script>console.log('PHP Value: " . addslashes($category_id) . "');</script>";
         if ($category_id > 0) {
             $stmt = $link->prepare("SELECT * FROM products WHERE category_id = ?");
@@ -53,12 +53,12 @@
                     <?php
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
-                            echo '<div class="product-item">';
+                           
                             echo '<button class="menu-box-item" onclick="sendImage(' . $row["product_id"] . ')">';
                             echo '<img src="products_crud/display_product_image.php?product_id=' . $row["product_id"] . '" title="' . htmlspecialchars($row["product_name"]) . '" id="img' . $row["product_id"] . '">';
                             echo '<h3 class="item-cost">' . htmlspecialchars($row["product_name"]) . '<br>$' . number_format($row["Price"], 2) . '</h3>';
                             echo '</button>';
-                            echo '</div>';
+                            
                         }
                     } else {
                         echo '<p>No products found for this category.</p>';

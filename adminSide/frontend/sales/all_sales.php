@@ -88,19 +88,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_all_receipts
     <!-- Navigation bar -->
     <header class="navbar">
         <div class="navhome">
-            <a href="../index.html"><img src="../logos/home.png" id="coffee-logo"></a>
-            <a href="../index.html">
-                <h2>Northside Café</h2>
+            <a href="../index.php"><img src="../logos/coffee_logo.png" id="coffee-logo"></a>
+            <a href="../index.php">
+                <h2>Northside Caf&eacute;</h2>
             </a>
         </div>
         <div class="navlinks">
             <div class="adminlinks">
                 <a href="../settings.html"><img src="../logos/settings.png"></a>
-                <a href="../report.html"><img src="../logos/analytics.png"></a>
+                <a href="../sales/all_sales.php"><img src="../logos/analytics.png"></a>
             </div>
             <div class="generallinks">
-                <a href="../transactions_admin.html"><img src="../logos/print.png"></a>
-                <a href="../user.html"><img src="../logos/user.png"></a>
+                <a href="../sales/staff_sales.php"><img src="../logos/print.png"></a>
+                <a href="../user.php"><img src="../logos/user.png"></a>
             </div>
         </div>
     </header>
@@ -114,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_all_receipts
             <div class="date">
                 <p id="todaydate"></p>
             </div>
-            <p>TOTAL SALES<br><span class="needsbackend">$0</span></p>
-            <p>TOTAL TRANSACTIONS<br><span class="needsbackend">0</span></p>
+            <p>TOTAL SALES<br><span class="needsbackend">$25</span></p>
+            <p>TOTAL TRANSACTIONS<br><span class="needsbackend">3</span></p>
         </div>
 
         <div class="report-filter">

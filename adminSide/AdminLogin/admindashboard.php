@@ -55,7 +55,7 @@ require_once "../config.php";
 
     <footer>
         <div class="container">
-            <p>&copy; <?php echo date("Y"); ?> Northside Café</p>
+            <p>&copy; <?php echo date("Y"); ?> Northside Caf&eacute;</p>
         </div>
     </footer>
 

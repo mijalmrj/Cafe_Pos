@@ -14,16 +14,16 @@
         <header class="navbar">
             <div class="navhome">
                 <a href="../frontend/index.php"><img src="logos/home.png" alt="Home"></a>
-                <a href="../frontend/index.php"><h2>Northside Café</h2></a>
+                <a href="../frontend/index.php"><h2>Northside Caf&eacute;</h2></a>
             </div>
             <div class="navlinks">
                 <div class="adminlinks">
                     <a href="../frontend/settings.html"><img src="logos/settings.png" alt="Settings"></a>
-                    <a href="../frontend/report.html"><img src="logos/analytics.png" alt="Report"></a>
+                    <a href="../frontend/sales/all_sales.php"><img src="logos/analytics.png" alt="Report"></a>
                 </div>
                 <div class="generallinks">
                     <a href="../frontend/transactions.html"><img src="logos/print.png" alt="Transactions"></a>
-                    <a href="../frontend/user.html"><img src="logos/user.png" alt="User"></a>
+                    <a href="../frontend/user.php"><img src="logos/user.png" alt="User"></a>
                 </div>
             </div>
         </header>

@@ -13,17 +13,17 @@
         <!-- Navigation bar -->
         <header class="navbar">
             <div class="navhome">
-                <a href="index.html"><img src="../logos/home.png" id="coffee-logo"></a>
-                <a href="index.php"><h2>Northside Café</h2></a>
+                <a href="index.php"><img src="../logos/home.png" id="coffee-logo"></a>
+                <a href="index.php"><h2>Northside Caf&eacute;</h2></a>
             </div>
             <div class="navlinks">
                 <div class="adminlinks">
                     <a href="../settings.html"><img src="../logos/settings.png"></a>
-                    <a href="../report.html"><img src="../logos/analytics.png"></a>
+                    <a href="../sales/all_sales.php"><img src="../logos/analytics.png"></a>
                 </div>
                 <div class="generallinks">
-                    <a href="../transactions_admin.html"><img src="../logos/print.png"></a>
-                    <a href="../user.html"><img src="../logos/user.png"></a>
+                    <a href="../sales/staff_sales.php"><img src="../logos/print.png"></a>
+                    <a href="../user.php"><img src="../logos/user.png"></a>
                 </div>
             </div>
         </header>
@@ -67,8 +67,8 @@
                             echo "<td>$" . number_format($row["Price"], 2) . "</td>";
                             echo "<td>" . $row["category_id"] . "</td>";
                             echo '<td>
-                                    <a href="products_crud/edit_items.php?id=' . $row["product_id"] . '">EDIT</a> 
-                                    <a href="products_crud/delete_item.php?id=' . $row["product_id"] . '">DELETE</a>
+                                    <a href="edit_items.php?id=' . $row["product_id"] . '">EDIT</a> 
+                                    <a href="delete_item.php?id=' . $row["product_id"] . '">DELETE</a>
                                   </td>';
                             echo "</tr>";
                         }

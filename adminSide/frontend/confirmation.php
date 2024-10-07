@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         foreach ($orderDetails as $item) {
-            $stmtDetails->bind_param("iisss", $orderId, $item['id'], $item['name'], $item['size'], $item['no']);
+            $stmtDetails->bind_param("iiss", $orderId, $item['id'], $item['name'], $item['size']);
             $stmtDetails->execute();
         }
 
